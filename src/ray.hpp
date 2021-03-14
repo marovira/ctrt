@@ -2,26 +2,22 @@
 
 #include "vector.hpp"
 
-namespace math
+template<typename T>
+class Ray
 {
-    template<typename T>
-    class Ray
+public:
+    constexpr Ray() = default;
+    constexpr Ray(Point<T> o, Vector<T> d) : origin{o}, direction{d}
+    {}
+
+    constexpr Vector<T> operator()(T t) const
     {
-    public:
-        constexpr Ray() = default;
-        constexpr Ray(math::Point<T> o, math::Vector<T> d) :
-            origin{o}, direction{d}
-        {}
+        return origin + t * direction;
+    }
 
-        constexpr math::Vector<T> operator()(T t) const
-        {
-            return origin + t * direction;
-        }
+    Point<T> origin;
+    Vector<T> direction;
+};
 
-        math::Point<T> origin;
-        math::Point<T> direction;
-    };
-
-    using Rayf = Ray<float>;
-    using Rayd = Ray<double>;
-} // namespace math
+using Rayf = Ray<float>;
+using Rayd = Ray<double>;

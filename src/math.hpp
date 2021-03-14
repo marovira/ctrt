@@ -3,19 +3,19 @@
 #include <limits>
 #include <type_traits>
 
+namespace detail
+{
+    template<typename T>
+    constexpr T sqrt_newton_rhapson(T x, T curr, T prev)
+    {
+        return curr == prev
+                   ? curr
+                   : sqrt_newton_rhapson(x, T{0.5} * (curr + x / curr), curr);
+    }
+} // namespace detail
+
 namespace math
 {
-    namespace detail
-    {
-        template<typename T>
-        constexpr T sqrt_newton_rhapson(T x, T curr, T prev)
-        {
-            return curr == prev ? curr
-                                : sqrt_newton_rhapson(
-                                      x, T{0.5} * (curr + x / curr), curr);
-        }
-    } // namespace detail
-
     template<typename T>
     constexpr T sqrt(T x)
     {
