@@ -1,0 +1,11 @@
+# Build folders #
+build/
+doc/
+bin/
+html/
+lib/
+gh-pages/
+
+# Generated files #
+generated/
+doc/html
