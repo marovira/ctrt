@@ -145,6 +145,18 @@ namespace math
     }
 
     template<typename T>
+    constexpr bool operator==(Vector<T> const& lhs, Vector<T> const& rhs)
+    {
+        return lhs.x() == rhs.x() && lhs.y() == rhs.y() && lhs.z() == lhs.z();
+    }
+
+    template<typename T>
+    constexpr bool operator!=(Vector<T> const& lhs, Vector<T> const& rhs)
+    {
+        return !(lhs == rhs);
+    }
+
+    template<typename T>
     constexpr Vector<T> operator-(Vector<T> const& vec)
     {
         return unary_op(vec, [](T a) { return -a; });
@@ -262,10 +274,14 @@ namespace math
     using Vectorf = Vector<float>;
     using Vectord = Vector<double>;
 
-    using Pointf = Vectorf;
-    using Pointd = Vectord;
+    template<typename T>
+    using Point  = Vector<T>;
+    using Pointf = Point<float>;
+    using Pointd = Point<double>;
 
-    using Colourf = Vectorf;
-    using Colourd = Vectord;
+    template<typename T>
+    using Colour  = Vector<T>;
+    using Colourf = Colour<float>;
+    using Colourd = Colour<double>;
 
 } // namespace math
