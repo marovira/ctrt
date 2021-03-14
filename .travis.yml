@@ -1,0 +1,45 @@
+language: cpp
+os: linux
+dist: bionic
+
+# Only notify on failure
+notifications:
+    email:
+        on_success: never
+        on_failure: always
+
+compiler:
+    - gcc
+    - clang
+
+env:
+    - BUILD_TYPE=Debug
+    - BUILD_TYPE=Release
+
+addons:
+    apt:
+        sources:
+            - sourceline: 'deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-9 main'
+              key_url: 'https://apt.llvm.org/llvm-snapshot.gpg.key'
+            - sourceline: 'ppa:ubuntu-toolchain-r/test'
+        packages:
+            - clang-9
+            - cmake
+            - gcc-9
+            - g++-9
+branches:
+    only:
+        - master
+
+install:
+    - if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      if [ "$CXX" = "clang++" ]; then export CXX="clang++-9" CC="clang-9"; fi;
+      if [ "$CXX" = "g++" ]; then export CXX="g++-9" CC="gcc-9"; fi;
+      fi
+
+script:
+    - mkdir build && cd build
+    - cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF
+    - make
+    - make test
+

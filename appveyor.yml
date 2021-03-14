@@ -1,0 +1,38 @@
+version: '1.0.0.{build}'
+
+branches:
+    only:
+        - master
+
+skip_commits:
+    files:
+        - README.md
+        - LICENSE
+        - appveyor.yml
+        - .clang-format
+        - .clang-tidy
+        - .gitignore
+        - .travis.yml
+
+image: Visual Studio 2019
+
+platform:
+    - x64
+
+configuration:
+    - Release
+    - Debug
+
+environment:
+    CONFIG: $(CONFIGURATION)
+
+before_build:
+    - ps: New-Item -Path . -Name "build" -ItemType "directory"
+    - ps: Set-Location -Path ./build
+    - cmake -G "Visual Studio 16 2019" .. -DBUILD_SHARED_LIBS=OFF
+
+build:
+    project: $(APPVEYOR_BUILD_FOLDER)\build\$(APPVEYOR_PROJECT_NAME).sln
+
+test_script:
+    - cmake --build . --target RUN_TESTS --config %CONFIG%
