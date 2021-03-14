@@ -2,29 +2,27 @@
 
 #include "ray.hpp"
 
-template<std::size_t width, std::size_t height>
 class Camera
 {
 public:
-    constexpr Rayf get_ray(std::size_t row, std::size_t col) const
+    constexpr Camera(Pointf const& eye,
+                     Vectorf const& look_at,
+                     Vectorf const& up,
+                     float distance) :
+        m_distance{distance}
     {
-        float u = static_cast<float>(row) / (width - 1);
-        float v = static_cast<float>(col) / (height - 1);
+        m_w = unit_vector(eye - look_at);
+        m_u = unit_vector(cross(up, m_w));
+        m_v = cross(m_w, m_u);
+    }
 
-        Rayf ray{m_origin,
-                 m_lower_left + (u * m_right) + (v * m_up) - m_origin};
-        return ray;
+    constexpr Vectorf get_ray_direction(Pointf const& p) const
+    {
+        auto dir = p.x() * m_u + p.y() * m_v - m_distance * m_w;
+        return unit_vector(dir);
     }
 
 private:
-    float m_viewport_height{2.0f};
-    float m_aspect_ratio{static_cast<float>(width) / height};
-    float m_viewport_width{m_aspect_ratio * m_viewport_height};
-    float m_focal_length{1.0f};
-
-    Vectorf m_origin{0.0f};
-    Vectorf m_right{m_viewport_width, 0.0f, 0.0f};
-    Vectorf m_up{0.0f, m_viewport_height, 0.0f};
-    Vectorf m_lower_left{m_origin - (m_right / 2.0f) - (m_up / 2.0f) -
-                         Vectorf{0.0f, 0.0f, m_focal_length}};
+    Vectorf m_u, m_v, m_w;
+    float m_distance;
 };
