@@ -3,6 +3,7 @@ set(CTRT_INCLUDE_FILES
     ${CTRT_SOURCE_ROOT}/math.hpp
     ${CTRT_SOURCE_ROOT}/ray.hpp
     ${CTRT_SOURCE_ROOT}/camera.hpp
+    ${CTRT_SOURCE_ROOT}/canvas.hpp
     PARENT_SCOPE)
 
 set(CTRT_SOURCE_FILES
