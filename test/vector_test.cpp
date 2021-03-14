@@ -88,6 +88,24 @@ TEST_CASE("[Vector] - binary_op: lvalue version")
     REQUIRE(result.z() == 3.0f);
 }
 
+TEST_CASE("[Vector] - operator==")
+{
+    constexpr math::Vectorf v{1.0f};
+    constexpr math::Vectorf u{2.0f};
+
+    REQUIRE(v == v);
+    REQUIRE_FALSE(v == u);
+}
+
+TEST_CASE("[Vector] - operator!=")
+{
+    constexpr math::Vectorf v{1.0f};
+    constexpr math::Vectorf u{2.0f};
+
+    REQUIRE(v != u);
+    REQUIRE_FALSE(v != v);
+}
+
 TEST_CASE("[Vector] - operator-: unary")
 {
     constexpr math::Vectorf v{1.0f};
