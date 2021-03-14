@@ -31,9 +31,19 @@ namespace math
             return data[0];
         }
 
+        constexpr T& r()
+        {
+            return x();
+        }
+
         constexpr T x() const
         {
             return data[0];
+        }
+
+        constexpr T r() const
+        {
+            return x();
         }
 
         constexpr T& y()
@@ -41,9 +51,19 @@ namespace math
             return data[1];
         }
 
+        constexpr T& g()
+        {
+            return y();
+        }
+
         constexpr T y() const
         {
             return data[1];
+        }
+
+        constexpr T g() const
+        {
+            return y();
         }
 
         constexpr T& z()
@@ -51,9 +71,19 @@ namespace math
             return data[2];
         }
 
+        constexpr T& b()
+        {
+            return z();
+        }
+
         constexpr T z() const
         {
             return data[2];
+        }
+
+        constexpr T b() const
+        {
+            return z();
         }
 
         constexpr T operator[](std::size_t i) const
@@ -234,5 +264,8 @@ namespace math
 
     using Pointf = Vectorf;
     using Pointd = Vectord;
+
+    using Colourf = Vectorf;
+    using Colourd = Vectord;
 
 } // namespace math
