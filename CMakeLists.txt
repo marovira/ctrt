@@ -18,6 +18,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 # Option variables.
 #================================
 option(CTRT_BUILD_TESTS "Build CTRT unit tests" ON)
+option(CTRT_RENDER_STATIC "Perform render at compile-time" OFF)
 
 # Make sure Zeus does not make the clang-format target and disable the
 # unit tests for it.
@@ -86,7 +87,7 @@ endif()
 # Compiler flags.
 #================================
 if (MSVC)
-    set(CTRT_COMPILER_FLAGS /W4 /WX /MP)
+    set(CTRT_COMPILER_FLAGS /W4 /WX /MP /constexpr:steps2147483647)
     set(CTRT_DEBUG_FLAGS "$<$<CONFIG:DEBUG>:/ZI>")
     set(CTRT_COMPILE_DEFINITIONS -DNOMINMAX)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL
@@ -99,6 +100,12 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL
     endif()
     set(CTRT_DEBUG_FLAGS "$<$<CONFIG:DEBUG>:-g>")
 endif()
+
+if (CTRT_RENDER_STATIC)
+    set(CTRT_COMPILE_DEFINITIONS ${CTRT_COMPILE_DEFINITIONS}
+        -DCTRT_DO_STATIC_RENDER)
+endif()
+
 
 add_executable(ctrt ${CTRT_INCLUDE_FILES} ${CTRT_SOURCE_FILES})
 target_include_directories(ctrt PUBLIC ${CTRT_SOURCE_ROOT})
