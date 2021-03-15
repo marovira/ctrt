@@ -2,6 +2,9 @@
 #include "canvas.hpp"
 #include "scene.hpp"
 
+#include <fmt/printf.h>
+#include <zeus/timer.hpp>
+
 template<typename T, class Canvas>
 constexpr void render(Scene<T> const& scene, Canvas& canvas)
 {
@@ -25,9 +28,12 @@ constexpr void render(Scene<T> const& scene, Canvas& canvas)
 
 int main()
 {
+    constexpr std::size_t image_width{512};
+    constexpr std::size_t image_height{512};
+
 #if defined(CTRT_DO_STATIC_RENDER)
     constexpr auto canvas = []() {
-        StaticCanvas<100, 100> canvas;
+        StaticCanvas<image_width, image_height> canvas;
         constexpr Camera camera{Pointf{0.0f, 0.0f, 500.0f},
                                 Vectorf{0.0f},
                                 Vectorf{0.0f, 1.0f, 0.0f},
@@ -39,15 +45,22 @@ int main()
     }();
 
 #else
-    RuntimeCanvas canvas{512, 512};
+    RuntimeCanvas canvas{image_width, image_height};
     Camera camera{Pointf{0.0f, 0.0f, 500.0f},
                   Vectorf{0.0f},
                   Vectorf{0.0f, 1.0f, 0.0f},
                   500.0f};
     FirstScene scene{camera};
+
+    zeus::Timer<float> timer;
+
+    timer.start();
+    render(scene, canvas);
+    auto elapsed = timer.elapsed();
+    fmt::print("render in: {} ms\n", elapsed * 100);
 #endif
 
-    save_image("../first_render.jpg", canvas);
+    save_image("../render.jpg", canvas);
 
     return 0;
 }
