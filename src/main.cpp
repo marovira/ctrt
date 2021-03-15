@@ -26,22 +26,23 @@ constexpr void render(Scene<T> const& scene, Image& image)
     }
 }
 
+constexpr std::size_t image_width{50};
+constexpr std::size_t image_height{50};
+
+#define CTRT_DO_STATIC_RENDER
 int main()
 {
-    constexpr std::size_t image_width{512};
-    constexpr std::size_t image_height{512};
-
 #if defined(CTRT_DO_STATIC_RENDER)
-    constexpr auto canvas = []() {
-        StaticCanvas<image_width, image_height> canvas;
+    constexpr auto image = []() {
+        StaticImage<image_width, image_height> image;
         constexpr Camera camera{Pointf{0.0f, 0.0f, 500.0f},
                                 Vectorf{0.0f},
                                 Vectorf{0.0f, 1.0f, 0.0f},
                                 500.0f};
         constexpr FirstScene scene{camera};
 
-        render(scene, canvas);
-        return canvas;
+        render(scene, image);
+        return image;
     }();
 
 #else
