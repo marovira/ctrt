@@ -48,8 +48,8 @@ public:
 
     void set_pixel(std::size_t row, std::size_t col, Colourf const& colour)
     {
-        ASSERT(row >= 0 && row < m_width);
-        ASSERT(col >= 0 && row < m_height);
+        ASSERT(row < m_width);
+        ASSERT(row < m_height);
         ASSERT(!std::isnan(colour.r()));
         ASSERT(!std::isnan(colour.g()));
         ASSERT(!std::isnan(colour.b()));
