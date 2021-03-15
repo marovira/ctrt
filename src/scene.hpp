@@ -7,12 +7,16 @@
 template<typename T>
 class Scene
 {
-    constexpr Scene(Camera const& camera) : m_camera{camera}
-    {}
+    constexpr Scene() = default;
 
     friend T;
 
 public:
+    constexpr void set_camera(Camera const& camera)
+    {
+        m_camera = camera;
+    }
+
     constexpr Camera get_camera() const
     {
         return m_camera;
@@ -30,8 +34,7 @@ private:
 class FirstScene : public Scene<FirstScene>
 {
 public:
-    constexpr FirstScene(Camera const& camera) : Scene{camera}
-    {}
+    constexpr FirstScene() = default;
 
     constexpr Colourf trace(Rayf const& ray) const
     {

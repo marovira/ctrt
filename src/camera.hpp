@@ -5,6 +5,9 @@
 class Camera
 {
 public:
+    constexpr Camera() : m_distance{0.0f}
+    {}
+
     constexpr Camera(Pointf const& eye,
                      Vectorf const& look_at,
                      Vectorf const& up,

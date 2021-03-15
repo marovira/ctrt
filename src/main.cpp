@@ -29,17 +29,19 @@ constexpr void render(Scene<T> const& scene, Image& image)
 constexpr std::size_t image_width{50};
 constexpr std::size_t image_height{50};
 
-#define CTRT_DO_STATIC_RENDER
+//#define CTRT_DO_STATIC_RENDER
 int main()
 {
 #if defined(CTRT_DO_STATIC_RENDER)
     constexpr auto image = []() {
         StaticImage<image_width, image_height> image;
-        constexpr Camera camera{Pointf{0.0f, 0.0f, 500.0f},
-                                Vectorf{0.0f},
-                                Vectorf{0.0f, 1.0f, 0.0f},
-                                500.0f};
-        constexpr FirstScene scene{camera};
+        Camera camera{Pointf{0.0f, 0.0f, 500.0f},
+                      Vectorf{0.0f},
+                      Vectorf{0.0f, 1.0f, 0.0f},
+                      500.0f};
+
+        FirstScene scene;
+        scene.set_camera(camera);
 
         render(scene, image);
         return image;
@@ -51,7 +53,8 @@ int main()
                   Vectorf{0.0f},
                   Vectorf{0.0f, 1.0f, 0.0f},
                   500.0f};
-    FirstScene scene{camera};
+    FirstScene scene;
+    scene.set_camera(camera);
 
     zeus::Timer<float> timer;
 
