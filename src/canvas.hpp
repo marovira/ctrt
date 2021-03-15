@@ -91,7 +91,8 @@ void save_image(std::string const& filename, Canvas const& canvas)
     auto image = canvas.get_image();
 
     // First convert the image to pixels.
-    std::vector<Pixel> pixel_buffer.resize(image.size() * Canvas::channels);
+    std::vector<Pixel> pixel_buffer;
+    pixel_buffer.resize(image.size() * Canvas::channels);
     std::size_t i{0};
     for (std::size_t row{0}; row < canvas.get_width(); ++row)
     {
@@ -104,11 +105,11 @@ void save_image(std::string const& filename, Canvas const& canvas)
         }
     }
 
-    stbi_write_jpg(filename.c_str,
-                   canvas.get_width(),
-                   canvas.get_height(),
+    stbi_write_jpg(filename.c_str(),
+                   static_cast<int>(canvas.get_width()),
+                   static_cast<int>(canvas.get_height()),
                    Canvas::channels,
                    pixel_buffer.data(),
-                   Canvas::channels * canvas.get_width());
+                   static_cast<int>(Canvas::channels * canvas.get_width()));
 }
 #endif
