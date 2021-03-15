@@ -8,3 +8,39 @@
 [![Build Status](https://travis-ci.org/marovira/ctrt.svg?branch=master)](https://travis-ci.org/marovira/ctrt)
 [![Build status](https://ci.appveyor.com/api/projects/status/qk8lbpldkada6xl6?svg=true)](https://ci.appveyor.com/project/marovira/ctrt)
 
+## What is CTRT?
+
+CTRT (short for **C**ompile-**T**ime **R**ay **T**racing) is a relatively simple
+ray tracer designed to perform *all* computations at compile-time without using
+template metaprogramming. Instead, CTRT relies on C++17 `constexpr` functions to
+generate the final image.
+
+It is loosely based on Peter Shirley's [Ray Tracing in One
+Weekend](https://raytracing.github.io/) with some ideas taken from Kevin
+Suffern's *Ray Tracing from the Ground Up*. 
+
+## Dependencies
+
+The following are **core** dependencies of CTRT:
+
+* CMake 3.19+
+* A C++17 compiler.
+
+CTRT has been tested on the following platforms and compilers:
+
+| Platform (Compiler) | Version |
+|---------------------|---------|
+| Windows (MSVC) | 19.28 |
+| Linux (GCC) | 9.3 |
+| Linux (Clang) | 9.0 |
+
+As with most of my projects, macOS is **not** supported.
+
+In addition, CTRT depends on the following libraries:
+
+* [Zeus](https://github.com/marovira/zeus)
+
+## License
+
+CTRT is published under the BSD-3 license and can be viewed
+[here](https://github.com/marovira/ctrt/blob/master/LICENSE)
