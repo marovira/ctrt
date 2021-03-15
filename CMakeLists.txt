@@ -87,7 +87,7 @@ endif()
 # Compiler flags.
 #================================
 if (MSVC)
-    set(CTRT_COMPILER_FLAGS /W4 /WX /MP /constexpr:steps2147483647)
+    set(CTRT_COMPILER_FLAGS /W4 /WX /MP /constexpr:steps2147483647 /bigobj)
     set(CTRT_DEBUG_FLAGS "$<$<CONFIG:DEBUG>:/ZI>")
     set(CTRT_COMPILE_DEFINITIONS -DNOMINMAX)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL
