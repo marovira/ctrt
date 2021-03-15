@@ -19,6 +19,24 @@ It is loosely based on Peter Shirley's [Ray Tracing in One
 Weekend](https://raytracing.github.io/) with some ideas taken from Kevin
 Suffern's *Ray Tracing from the Ground Up*. 
 
+## Results
+
+Last render performed:
+
+![render](https://github.com/marovira/ctrt/blob/master/render.jpg)
+
+## Performance
+
+All tests were performed on a PC running Windows 10 64-bit with an AMD Ryzen 9
+3900X processor and 64 GB of RAM. The code was compiled using MSVC 16.8.5. The
+comparisons were performed by generating the image both at runtime and compile
+time. All tested images are 512x512 and can be found in the `test_images`
+directory. Results are as follows:
+
+| Test | Runtime | Compile-time |
+|------|---------|--------------|
+| test_01 | 14.305 ms | 19m 35s |
+
 ## Dependencies
 
 The following are **core** dependencies of CTRT:
