@@ -12,12 +12,15 @@ enum class ImageType
     dynamic_image
 };
 
-template<class Container, std::size_t width, std::size_t height, ImageType type>
+template<class Container,
+         std::size_t image_width,
+         std::size_t image_height,
+         ImageType type>
 class Image
 {
 public:
-    static constexpr std::size_t width{width};
-    static constexpr std::size_t height{height};
+    static constexpr std::size_t width{image_width};
+    static constexpr std::size_t height{image_height};
     static constexpr std::size_t size{width * height};
     static constexpr int channels{3};
 
