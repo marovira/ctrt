@@ -30,19 +30,19 @@ namespace utils
 
     // Taken from FluentC++
     // https://www.fluentcpp.com/2017/05/19/crtp-helper/
-    template<typename T, template<typename> class CRTPType>
-    class CRTP
+    template<typename T, template<typename> class crtpType>
+    class StaticBase
     {
-        CRTP() = default;
-        friend CRTPType<T>;
+        StaticBase() = default;
+        friend crtpType<T>;
 
     public:
-        T& underlying()
+        T& self()
         {
             return static_cast<T&>(*this);
         }
 
-        T const& underlying() const
+        T const& self() const
         {
             return static_cast<T const&>(*this);
         }

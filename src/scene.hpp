@@ -2,15 +2,12 @@
 
 #include "camera.hpp"
 #include "ray.hpp"
+#include "utils.hpp"
 #include "vector.hpp"
 
 template<typename T>
-class Scene
+class Scene : public utils::StaticBase<T, Scene>
 {
-    constexpr Scene() = default;
-
-    friend T;
-
 public:
     constexpr void set_camera(Camera const& camera)
     {
@@ -24,7 +21,7 @@ public:
 
     constexpr Colourf trace(Rayf const& ray) const
     {
-        return static_cast<T const&>(*this).trace(ray);
+        return this->self().trace(ray);
     }
 
 private:
