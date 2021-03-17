@@ -37,12 +37,12 @@ namespace utils
         friend crtpType<T>;
 
     public:
-        T& self()
+        constexpr T& self()
         {
             return static_cast<T&>(*this);
         }
 
-        T const& self() const
+        constexpr T const& self() const
         {
             return static_cast<T const&>(*this);
         }

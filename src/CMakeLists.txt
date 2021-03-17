@@ -7,6 +7,7 @@ set(CTRT_INCLUDE_FILES
     ${CTRT_SOURCE_ROOT}/scene.hpp
     ${CTRT_SOURCE_ROOT}/shapes.hpp
     ${CTRT_SOURCE_ROOT}/materials.hpp
+    ${CTRT_SOURCE_ROOT}/renderer.hpp
     PARENT_SCOPE)
 
 set(CTRT_SOURCE_FILES

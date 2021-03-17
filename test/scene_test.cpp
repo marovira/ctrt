@@ -12,7 +12,7 @@ TEST_CASE("[FirstScene] - trace")
     FirstScene scene;
     scene.set_camera(camera);
     auto dir    = scene.get_camera().get_ray_direction(Pointf{0.0f});
-    auto result = scene.trace(Rayf{Pointf{0.0f}, dir});
+    auto result = scene.trace_simple(Rayf{Pointf{0.0f}, dir});
 
     REQUIRE(result.b() == 1.0f);
 }
