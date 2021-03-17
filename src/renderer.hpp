@@ -53,10 +53,8 @@ public:
                     static_cast<float>(col) - 0.5f * width + sample_pt.x(),
                     static_cast<float>(row) - 0.5f * height + sample_pt.y(),
                     0.0f};
-                ray.direction  = scene.get_camera().get_ray_direction(pixel_pt);
-                Colourf colour = scene.trace(ray, shapes, materials);
-
-                image(row, col) = colour;
+                ray.direction = scene.get_camera().get_ray_direction(pixel_pt);
+                image(row, col) = scene.trace(ray, shapes, materials);
             }
         }
     }

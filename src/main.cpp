@@ -5,10 +5,10 @@
 #include <fmt/printf.h>
 #include <zeus/timer.hpp>
 
-constexpr std::size_t image_width{50};
-constexpr std::size_t image_height{50};
+constexpr std::size_t image_width{512};
+constexpr std::size_t image_height{512};
 
-#define CTRT_DO_STATIC_RENDER
+//#define CTRT_DO_STATIC_RENDER
 
 auto render_scene_1()
 {

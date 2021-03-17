@@ -28,14 +28,15 @@ Last render performed:
 ## Performance
 
 All tests were performed on a PC running Windows 10 64-bit with an AMD Ryzen 9
-3900X processor and 64 GB of RAM. The code was compiled using MSVC 16.8.5. The
+3900X processor and 64 GB of RAM. The code was compiled using MSVC 16.9.1. The
 comparisons were performed by generating the image both at runtime and compile
 time. All tested images are 512x512 and can be found in the `test_images`
 directory. Results are as follows:
 
 | Test | Runtime | Compile-time |
 |------|---------|--------------|
-| test_01 | 14.305 ms | 19m 35s |
+| test_01 | 1.67 ms | 19m 35s |
+| test_02 | 3.10 ms| 34m 36s |
 
 ## Dependencies
 
