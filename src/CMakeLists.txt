@@ -5,6 +5,7 @@ set(CTRT_INCLUDE_FILES
     ${CTRT_SOURCE_ROOT}/camera.hpp
     ${CTRT_SOURCE_ROOT}/image.hpp
     ${CTRT_SOURCE_ROOT}/scene.hpp
+    ${CTRT_SOURCE_ROOT}/shapes.hpp
     PARENT_SCOPE)
 
 set(CTRT_SOURCE_FILES
