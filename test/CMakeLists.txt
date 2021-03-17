@@ -1,7 +1,7 @@
 set(CTRT_TEST_SOURCE
     ${CTRT_TEST_ROOT}/test_main.cpp
     ${CTRT_TEST_ROOT}/vector_test.cpp
-    ${CTRT_TEST_ROOT}/math_test.cpp
+    ${CTRT_TEST_ROOT}/utils_test.cpp
     ${CTRT_TEST_ROOT}/ray_test.cpp
     ${CTRT_TEST_ROOT}/camera_test.cpp
     ${CTRT_TEST_ROOT}/image_test.cpp

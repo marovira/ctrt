@@ -1,6 +1,6 @@
 #pragma once
 
-#include "math.hpp"
+#include "utils.hpp"
 
 #include <algorithm>
 #include <array>
@@ -244,7 +244,7 @@ constexpr T dot(Vector<T> const& lhs, Vector<T> const& rhs)
 template<typename T>
 constexpr T length(Vector<T> const& vec)
 {
-    return static_cast<T>(math::sqrt(dot(vec, vec)));
+    return static_cast<T>(utils::sqrt(dot(vec, vec)));
 }
 
 template<typename T>
