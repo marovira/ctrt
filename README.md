@@ -17,7 +17,12 @@ generate the final image.
 
 It is loosely based on Peter Shirley's [Ray Tracing in One
 Weekend](https://raytracing.github.io/) with some ideas taken from Kevin
-Suffern's *Ray Tracing from the Ground Up*. 
+Suffern's *Ray Tracing from the Ground Up*.
+
+> **Note:**
+>
+> If you're interested in how this ray tracer was designed, you can read about
+> [here](https://marovira.github.io/p/designing-a-compile-time-ray-tracer/)
 
 ## Results
 
