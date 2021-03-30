@@ -90,6 +90,7 @@ if (MSVC)
     set(CTRT_COMPILER_FLAGS /W4 /WX /MP /constexpr:steps2147483647 /bigobj)
     set(CTRT_DEBUG_FLAGS "$<$<CONFIG:DEBUG>:/ZI>")
     set(CTRT_COMPILE_DEFINITIONS -DNOMINMAX)
+    set(CTRT_LINKER_FLAGS /STACK:10000000)
 elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL
         "GNU")
     set(CTRT_COMMON_FLAGS -Wall -Wextra -pedantic -Werror)
@@ -99,13 +100,13 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR CMAKE_CXX_COMPILER_ID STREQUAL
         set(CTRT_COMPILER_FLAGS ${CTRT_COMMON_FLAGS} -stdlib=libstdc++)
     endif()
     set(CTRT_DEBUG_FLAGS "$<$<CONFIG:DEBUG>:-g>")
+    set(CTRT_LINKER_FLAGS)
 endif()
 
 if (CTRT_RENDER_STATIC)
     set(CTRT_COMPILE_DEFINITIONS ${CTRT_COMPILE_DEFINITIONS}
         -DCTRT_DO_STATIC_RENDER)
 endif()
-
 
 add_executable(ctrt ${CTRT_INCLUDE_FILES} ${CTRT_SOURCE_FILES})
 target_include_directories(ctrt PUBLIC ${CTRT_SOURCE_ROOT})
@@ -115,6 +116,10 @@ target_compile_options(ctrt PUBLIC ${CTRT_COMPILER_FLAGS})
 target_compile_options(ctrt PUBLIC ${CTRT_DEBUG_FLAGS})
 target_compile_definitions(ctrt PUBLIC ${CTRT_COMPILE_DEFINITIONS})
 set_target_properties(ctrt PROPERTIES FOLDER "ctrt")
+
+if (MSVC)
+    set_target_properties(ctrt PROPERTIES LINK_FLAGS ${CTRT_LINKER_FLAGS})
+endif()
 
 if (CTRT_BUILD_TESTS)
     FetchContent_Declare(
