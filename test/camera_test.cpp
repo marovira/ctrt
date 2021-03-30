@@ -4,11 +4,11 @@
 
 TEST_CASE("[Camera] - get_ray")
 {
-    constexpr Camera camera{Pointf{0.0f, 0.0f, 500.0f},
-                            Vectorf{0.0f},
-                            Vectorf{0.0f, 1.0f, 0.0f},
+    constexpr Camera camera{Point{0.0f, 0.0f, 500.0f},
+                            Vector{0.0f},
+                            Vector{0.0f, 1.0f, 0.0f},
                             500.0f};
-    auto result = camera.get_ray_direction(Pointf{0.0f});
+    auto result = camera.get_ray_direction(Point{0.0f});
 
-    REQUIRE(result == Vectorf{0.0f, 0.0f, -1.0f});
+    REQUIRE(result == Vector{0.0f, 0.0f, -1.0f});
 }

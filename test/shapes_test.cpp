@@ -7,8 +7,7 @@ TEST_CASE("[Plane] - hit: default plane")
     SECTION("Ray intersects")
     {
         constexpr Plane p;
-        constexpr Rayf ray{Pointf{0.0f, 1.0f, 0.0f},
-                           Vectorf{0.0f, -1.0f, 0.0f}};
+        constexpr Ray ray{Point{0.0f, 1.0f, 0.0f}, Vector{0.0f, -1.0f, 0.0f}};
 
         constexpr auto result = p.hit(ray);
 
@@ -18,7 +17,7 @@ TEST_CASE("[Plane] - hit: default plane")
     SECTION("Ray misses")
     {
         constexpr Plane p;
-        constexpr Rayf ray{Pointf{0.0f, 1.0f, 0.0f}, Vectorf{0.0f, 1.0f, 0.0f}};
+        constexpr Ray ray{Point{0.0f, 1.0f, 0.0f}, Vector{0.0f, 1.0f, 0.0f}};
 
         constexpr auto result = p.hit(ray);
 
@@ -30,9 +29,8 @@ TEST_CASE("[Plane] - hit: custom plane")
 {
     SECTION("Ray intersects")
     {
-        constexpr Plane p{Pointf{0.0f}, Vectorf{1.0f, 0.0f, 0.0f}};
-        constexpr Rayf ray{Pointf{1.0f, 0.0f, 0.0f},
-                           Vectorf{-1.0f, 1.0f, 0.0f}};
+        constexpr Plane p{Point{0.0f}, Vector{1.0f, 0.0f, 0.0f}};
+        constexpr Ray ray{Point{1.0f, 0.0f, 0.0f}, Vector{-1.0f, 1.0f, 0.0f}};
 
         constexpr auto result = p.hit(ray);
 
@@ -41,8 +39,8 @@ TEST_CASE("[Plane] - hit: custom plane")
 
     SECTION("Ray misses")
     {
-        constexpr Plane p{Pointf{0.0f}, Vectorf{1.0f, 0.0f, 0.0f}};
-        constexpr Rayf ray{Pointf{1.0f, 0.0f, 0.0f}, Vectorf{1.0f, 1.0f, 0.0f}};
+        constexpr Plane p{Point{0.0f}, Vector{1.0f, 0.0f, 0.0f}};
+        constexpr Ray ray{Point{1.0f, 0.0f, 0.0f}, Vector{1.0f, 1.0f, 0.0f}};
 
         constexpr auto result = p.hit(ray);
 
@@ -55,8 +53,7 @@ TEST_CASE("[Sphere] - hit: default sphere")
     SECTION("Ray intersects")
     {
         constexpr Sphere s;
-        constexpr Rayf ray{Pointf{2.0f, 0.0f, 0.0f},
-                           Vectorf{-1.0f, 0.0f, 0.0f}};
+        constexpr Ray ray{Point{2.0f, 0.0f, 0.0f}, Vector{-1.0f, 0.0f, 0.0f}};
 
         constexpr auto result = s.hit(ray);
 
@@ -66,7 +63,7 @@ TEST_CASE("[Sphere] - hit: default sphere")
     SECTION("Ray misses")
     {
         constexpr Sphere s;
-        constexpr Rayf ray{Pointf{2.0f, 0.0f, 0.0f}, Vectorf{1.0f, 0.0f, 0.0f}};
+        constexpr Ray ray{Point{2.0f, 0.0f, 0.0f}, Vector{1.0f, 0.0f, 0.0f}};
 
         constexpr auto result = s.hit(ray);
 
@@ -78,9 +75,8 @@ TEST_CASE("[Sphere] - hit: custom sphere")
 {
     SECTION("Ray intersects")
     {
-        constexpr Sphere s{Pointf{1.0f, 0.0f, 0.0f}, 2.0f};
-        constexpr Rayf ray{Pointf{5.0f, 0.0f, 0.0f},
-                           Vectorf{-1.0f, 0.0f, 0.0f}};
+        constexpr Sphere s{Point{1.0f, 0.0f, 0.0f}, 2.0f};
+        constexpr Ray ray{Point{5.0f, 0.0f, 0.0f}, Vector{-1.0f, 0.0f, 0.0f}};
 
         constexpr auto result = s.hit(ray);
 
@@ -89,8 +85,8 @@ TEST_CASE("[Sphere] - hit: custom sphere")
 
     SECTION("Ray misses")
     {
-        constexpr Sphere s{Pointf{1.0f, 0.0f, 0.0f}, 2.0f};
-        constexpr Rayf ray{Pointf{5.0f, 0.0f, 0.0f}, Vectorf{1.0f, 0.0f, 0.0f}};
+        constexpr Sphere s{Point{1.0f, 0.0f, 0.0f}, 2.0f};
+        constexpr Ray ray{Point{5.0f, 0.0f, 0.0f}, Vector{1.0f, 0.0f, 0.0f}};
 
         constexpr auto result = s.hit(ray);
 
@@ -101,7 +97,7 @@ TEST_CASE("[Sphere] - hit: custom sphere")
 TEST_CASE("[ShapeWrapper] - hit: plane")
 {
     constexpr Shapes shapes{Plane{}};
-    constexpr Rayf ray{Pointf{0.0f, 1.0f, 0.0f}, Vectorf{0.0f, -1.0f, 0.0f}};
+    constexpr Ray ray{Point{0.0f, 1.0f, 0.0f}, Vector{0.0f, -1.0f, 0.0f}};
 
     constexpr auto result = shapes.hit(ray);
 
@@ -111,7 +107,7 @@ TEST_CASE("[ShapeWrapper] - hit: plane")
 TEST_CASE("[ShapeWrapper] - hit: sphere")
 {
     constexpr Shapes shapes{Sphere{}};
-    constexpr Rayf ray{Pointf{2.0f, 0.0f, 0.0f}, Vectorf{-1.0f, 0.0f, 0.0f}};
+    constexpr Ray ray{Point{2.0f, 0.0f, 0.0f}, Vector{-1.0f, 0.0f, 0.0f}};
 
     constexpr auto result = shapes.hit(ray);
 
@@ -122,7 +118,7 @@ TEST_CASE("[ShapeContainer] - hit")
 {
     constexpr std::array<Shapes, 2> list{Sphere{}, Plane{}};
     constexpr ShapeContainer<decltype(list)> container{std::move(list)};
-    constexpr Rayf ray{Pointf{2.0f, 0.0f, 0.0f}, Vectorf{-1.0f, 0.0f, 0.0f}};
+    constexpr Ray ray{Point{2.0f, 0.0f, 0.0f}, Vector{-1.0f, 0.0f, 0.0f}};
 
     constexpr auto result = container.hit(ray);
 

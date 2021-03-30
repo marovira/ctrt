@@ -9,275 +9,222 @@
 #include <type_traits>
 #include <zeus/compiler.hpp>
 
-template<typename T>
 class Vector
 {
 public:
-    std::array<T, 3> data;
+    std::array<float, 3> data;
 
     constexpr Vector() : data{0, 0, 0}
     {}
 
-    constexpr explicit Vector(T x) : data{x, x, x}
+    constexpr explicit Vector(float x) : data{x, x, x}
     {}
 
-    constexpr Vector(T x, T y, T z) : data{x, y, z}
+    constexpr Vector(float x, float y, float z) : data{x, y, z}
     {}
 
-    constexpr T& x()
+    constexpr float& x()
     {
         return data[0];
     }
 
-    constexpr T& r()
+    constexpr float& r()
     {
         return x();
     }
 
-    constexpr T x() const
+    constexpr float x() const
     {
         return data[0];
     }
 
-    constexpr T r() const
+    constexpr float r() const
     {
         return x();
     }
 
-    constexpr T& y()
+    constexpr float& y()
     {
         return data[1];
     }
 
-    constexpr T& g()
+    constexpr float& g()
     {
         return y();
     }
 
-    constexpr T y() const
+    constexpr float y() const
     {
         return data[1];
     }
 
-    constexpr T g() const
+    constexpr float g() const
     {
         return y();
     }
 
-    constexpr T& z()
+    constexpr float& z()
     {
         return data[2];
     }
 
-    constexpr T& b()
+    constexpr float& b()
     {
         return z();
     }
 
-    constexpr T z() const
+    constexpr float z() const
     {
         return data[2];
     }
 
-    constexpr T b() const
+    constexpr float b() const
     {
         return z();
     }
 
-    constexpr T operator[](std::size_t i) const
+    constexpr float operator[](std::size_t i) const
     {
         return data[i];
     }
 
-    constexpr T& operator[](std::size_t i)
+    constexpr float& operator[](std::size_t i)
     {
         return data[i];
     }
 };
 
-template<typename T, typename UnaryOp>
-constexpr Vector<T> unary_op(Vector<T>&& vec, UnaryOp&& fun)
-{
-    Vector<T> out{std::move(vec)};
-    for (auto& val : out.data)
-    {
-        val = fun(val);
-    }
-    return out;
-}
-
-template<typename T, typename UnaryOp>
-constexpr Vector<T> unary_op(Vector<T> const& vec, UnaryOp&& fun)
-{
-    Vector<T> out{vec};
-    for (auto& val : out.data)
-    {
-        val = fun(val);
-    }
-    return out;
-}
-
-template<typename T, typename BinaryOp>
-constexpr Vector<T>
-binary_op(Vector<T>&& lhs, Vector<T> const& rhs, BinaryOp&& fun)
-{
-    Vector<T> out{std::move(lhs)};
-
-    for (std::size_t i{0}; i < 3; ++i)
-    {
-        out.data[i] = fun(lhs.data[i], rhs.data[i]);
-    }
-    return out;
-}
-
-template<typename T, typename BinaryOp>
-constexpr Vector<T>
-binary_op(Vector<T> const& lhs, Vector<T> const& rhs, BinaryOp&& fun)
-{
-    Vector<T> out{lhs};
-    for (std::size_t i{0}; i < 3; ++i)
-    {
-        out.data[i] = fun(lhs.data[i], rhs.data[i]);
-    }
-    return out;
-}
-
-template<typename T>
-constexpr bool operator==(Vector<T> const& lhs, Vector<T> const& rhs)
+constexpr bool operator==(Vector const& lhs, Vector const& rhs)
 {
     return lhs.x() == rhs.x() && lhs.y() == rhs.y() && lhs.z() == lhs.z();
 }
 
-template<typename T>
-constexpr bool operator!=(Vector<T> const& lhs, Vector<T> const& rhs)
+constexpr bool operator!=(Vector const& lhs, Vector const& rhs)
 {
     return !(lhs == rhs);
 }
 
-template<typename T>
-constexpr Vector<T> operator-(Vector<T> const& vec)
+constexpr Vector operator-(Vector const& vec)
 {
-    return unary_op(vec, [](T a) { return -a; });
+    return {-vec.x(), -vec.y(), -vec.z()};
 }
 
-template<typename T>
-constexpr Vector<T>& operator+=(Vector<T>& lhs, Vector<T> const& rhs)
+constexpr Vector& operator+=(Vector& lhs, Vector const& rhs)
 {
-    lhs = binary_op(std::move(lhs), rhs, [](T a, T b) { return a + b; });
+    lhs.x() += rhs.x();
+    lhs.y() += rhs.y();
+    lhs.z() += rhs.z();
+
     return lhs;
 }
 
-template<typename T>
-constexpr Vector<T>& operator-=(Vector<T>& lhs, Vector<T> const& rhs)
+constexpr Vector& operator-=(Vector& lhs, Vector const& rhs)
 {
-    lhs = binary_op(std::move(lhs), rhs, [](T a, T b) { return a - b; });
+    lhs.x() -= rhs.x();
+    lhs.y() -= rhs.y();
+    lhs.z() -= rhs.z();
+
     return lhs;
 }
 
-template<typename T>
-constexpr Vector<T>& operator*=(Vector<T>& lhs, T rhs)
+constexpr Vector& operator*=(Vector& lhs, Vector const& rhs)
 {
-    lhs = unary_op(std::move(lhs), [rhs](T a) { return a * rhs; });
+    lhs.x() *= rhs.x();
+    lhs.y() *= rhs.y();
+    lhs.z() *= rhs.z();
+
     return lhs;
 }
 
-template<typename T>
-constexpr Vector<T>& operator/=(Vector<T>& lhs, T rhs)
+constexpr Vector& operator*=(Vector& lhs, float rhs)
 {
-    lhs = unary_op(std::move(lhs), [rhs](T a) { return a / rhs; });
+    lhs.x() *= rhs;
+    lhs.y() *= rhs;
+    lhs.z() *= rhs;
+
     return lhs;
 }
 
-template<typename T>
-constexpr Vector<T> operator+(Vector<T> const& lhs, Vector<T> const& rhs)
+constexpr Vector& operator/=(Vector& lhs, float rhs)
 {
-    Vector<T> out{lhs};
+    lhs.x() /= rhs;
+    lhs.y() /= rhs;
+    lhs.z() /= rhs;
+
+    return lhs;
+}
+
+constexpr Vector operator+(Vector const& lhs, Vector const& rhs)
+{
+    Vector out{lhs};
     out += rhs;
     return out;
 }
 
-template<typename T>
-constexpr Vector<T> operator-(Vector<T> const& lhs, Vector<T> const& rhs)
+constexpr Vector operator-(Vector const& lhs, Vector const& rhs)
 {
-    Vector<T> out{lhs};
+    Vector out{lhs};
     out -= rhs;
     return out;
 }
 
-template<typename T>
-constexpr Vector<T> operator*(Vector<T> const& lhs, Vector<T> const& rhs)
+constexpr Vector operator*(Vector const& lhs, Vector const& rhs)
 {
-    Vector<T> out = binary_op(lhs, rhs, [](T a, T b) { return a * b; });
-    return out;
-}
-
-template<typename T>
-constexpr Vector<T> operator*(Vector<T> const& lhs, T rhs)
-{
-    Vector<T> out{lhs};
+    Vector out{lhs};
     out *= rhs;
     return out;
 }
 
-template<typename T>
-constexpr Vector<T> operator*(T lhs, Vector<T> const& rhs)
+constexpr Vector operator*(Vector const& lhs, float rhs)
 {
-    Vector<T> out{rhs};
+    Vector out{lhs};
+    out *= rhs;
+    return out;
+}
+
+constexpr Vector operator*(float lhs, Vector const& rhs)
+{
+    Vector out{rhs};
     out *= lhs;
     return out;
 }
 
-template<typename T>
-constexpr Vector<T> operator/(Vector<T> const& lhs, T rhs)
+constexpr Vector operator/(Vector const& lhs, float rhs)
 {
-    Vector<T> out{lhs};
+    Vector out{lhs};
     out /= rhs;
     return out;
 }
 
-template<typename T>
-constexpr T dot(Vector<T> const& lhs, Vector<T> const& rhs)
+constexpr float dot(Vector const& lhs, Vector const& rhs)
 {
     return (lhs.x() * rhs.x()) + (lhs.y() * rhs.y()) + (lhs.z() * rhs.z());
 }
 
-template<typename T>
-constexpr T length(Vector<T> const& vec)
+constexpr float length(Vector const& vec)
 {
-    return static_cast<T>(utils::sqrt(dot(vec, vec)));
+    return utils::sqrt(dot(vec, vec));
 }
 
-template<typename T>
-constexpr T length_squared(Vector<T> const& vec)
+constexpr float length_squared(Vector const& vec)
 {
     return dot(vec, vec);
 }
 
-template<typename T>
-constexpr Vector<T> cross(Vector<T> const& u, Vector<T> const& v)
+constexpr Vector cross(Vector const& u, Vector const& v)
 {
-    return Vector<T>{(u.y() * v.z()) - (u.z() * v.y()),
-                     (u.z() * v.x()) - (u.x() * v.z()),
-                     (u.x() * v.y()) - (u.y() * v.x())};
+    return Vector{(u.y() * v.z()) - (u.z() * v.y()),
+                  (u.z() * v.x()) - (u.x() * v.z()),
+                  (u.x() * v.y()) - (u.y() * v.x())};
 }
 
-template<typename T>
-constexpr Vector<T> unit_vector(Vector<T> const& v)
+constexpr Vector normalise(Vector const& v)
 {
-    Vector<T> out{v};
+    Vector out{v};
     out /= length(v);
     return out;
 }
 
-using Vectorf = Vector<float>;
-using Vectord = Vector<double>;
-
-template<typename T>
-using Point  = Vector<T>;
-using Pointf = Point<float>;
-using Pointd = Point<double>;
-
-template<typename T>
-using Colour  = Vector<T>;
-using Colourf = Colour<float>;
-using Colourd = Colour<double>;
+using Point  = Vector;
+using Normal = Vector;
+using Colour = Vector;

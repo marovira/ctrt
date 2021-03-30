@@ -52,14 +52,14 @@ private:
 };
 
 template<std::size_t width, std::size_t height>
-using StaticImage = Image<std::array<Colourf, width * height>,
+using StaticImage = Image<std::array<Colour, width * height>,
                           width,
                           height,
                           ImageType::static_image>;
 
 template<std::size_t width, std::size_t height>
 using DynamicImage =
-    Image<std::vector<Colourf>, width, height, ImageType::dynamic_image>;
+    Image<std::vector<Colour>, width, height, ImageType::dynamic_image>;
 
 #if defined(CTRT_DEFINE_SAVE_IMAGE)
 #    include <stb_image_write.h>
@@ -77,7 +77,7 @@ void save_image(std::string const& filename, Image const& image)
     {
         for (std::size_t col{0}; col < Image::height; ++col)
         {
-            Colourf colour    = image(row, col);
+            Colour colour     = image(row, col);
             pixel_buffer[i++] = static_cast<Pixel>(255.0f * colour.r());
             pixel_buffer[i++] = static_cast<Pixel>(255.0f * colour.g());
             pixel_buffer[i++] = static_cast<Pixel>(255.0f * colour.b());

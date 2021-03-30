@@ -8,8 +8,8 @@
 
 struct ShadeRec
 {
-    Pointf hit_point{};
-    Vectorf normal{};
+    Point hit_point{};
+    Vector normal{};
     int material_id{0};
     float t_min{0.0f};
 };
@@ -19,7 +19,7 @@ class Shape : public utils::StaticBase<T, Shape>
 {
 public:
     static constexpr float epsilon{0.0001f};
-    constexpr std::optional<ShadeRec> hit(Rayf const& ray) const
+    constexpr std::optional<ShadeRec> hit(Ray const& ray) const
     {
         return this->self().hit(ray);
     }
@@ -39,13 +39,13 @@ public:
     constexpr Plane() : m_pt{}, m_normal{0.0f, 1.0f, 0.0f}
     {}
 
-    constexpr Plane(Pointf const& pt, Vectorf const& n) : m_pt{pt}, m_normal{n}
+    constexpr Plane(Point const& pt, Vector const& n) : m_pt{pt}, m_normal{n}
     {}
 
-    constexpr std::optional<ShadeRec> hit(Rayf const& ray) const
+    constexpr std::optional<ShadeRec> hit(Ray const& ray) const
     {
-        Vectorf u = m_pt - ray.origin;
-        float t   = dot(u, m_normal) / dot(ray.direction, m_normal);
+        Vector u = m_pt - ray.origin;
+        float t  = dot(u, m_normal) / dot(ray.direction, m_normal);
 
         if (t > epsilon)
         {
@@ -61,8 +61,8 @@ public:
     }
 
 private:
-    Pointf m_pt;
-    Vectorf m_normal;
+    Point m_pt;
+    Vector m_normal;
 };
 
 class Sphere : public Shape<Sphere>
@@ -71,17 +71,17 @@ public:
     constexpr Sphere() : m_centre{0.0f}, m_radius{1.0f}, m_radius_squared{1.0f}
     {}
 
-    constexpr Sphere(Pointf const& pt, float radius) :
+    constexpr Sphere(Point const& pt, float radius) :
         m_centre{pt}, m_radius{radius}, m_radius_squared{radius * radius}
     {}
 
-    constexpr std::optional<ShadeRec> hit(Rayf const& ray) const
+    constexpr std::optional<ShadeRec> hit(Ray const& ray) const
     {
-        Vectorf temp = ray.origin - m_centre;
-        float a      = dot(ray.direction, ray.direction);
-        float b      = 2.0f * dot(temp, ray.direction);
-        float c      = dot(temp, temp) - m_radius_squared;
-        float disc   = b * b - 4.0f * a * c;
+        Vector temp = ray.origin - m_centre;
+        float a     = dot(ray.direction, ray.direction);
+        float b     = 2.0f * dot(temp, ray.direction);
+        float c     = dot(temp, temp) - m_radius_squared;
+        float disc  = b * b - 4.0f * a * c;
 
         if (disc < 0.0f)
         {
@@ -121,7 +121,7 @@ public:
     }
 
 private:
-    Pointf m_centre;
+    Point m_centre;
     float m_radius;
     float m_radius_squared;
 };
@@ -134,7 +134,7 @@ public:
     constexpr ShapeWrapper(T&& elem) : m_shape{std::forward<T>(elem)}
     {}
 
-    constexpr std::optional<ShadeRec> hit(Rayf const& ray) const
+    constexpr std::optional<ShadeRec> hit(Ray const& ray) const
     {
         return std::visit([ray](auto const& elem) { return elem.hit(ray); },
                           m_shape);
@@ -154,7 +154,7 @@ public:
         m_shapes{std::forward<Container>(list)}
     {}
 
-    constexpr std::optional<ShadeRec> hit(Rayf const& ray) const
+    constexpr std::optional<ShadeRec> hit(Ray const& ray) const
     {
         for (auto const& elem : m_shapes)
         {

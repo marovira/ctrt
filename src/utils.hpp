@@ -5,27 +5,22 @@
 
 namespace utils
 {
-    namespace detail
+    // Adapted from https://gist.github.com/alexshtf/eb5128b3e3e143187794
+    constexpr float sqrt(float x)
     {
-        // Adapted from https://gist.github.com/alexshtf/eb5128b3e3e143187794
-        template<typename T>
-        constexpr T sqrt_newton_rhapson(T x, T curr, T prev)
+        if (x >= 0 && x < std::numeric_limits<float>::infinity())
         {
-            return curr == prev ? curr
-                                : sqrt_newton_rhapson(
-                                      x, T{0.5} * (curr + x / curr), curr);
-        }
-    } // namespace detail
+            float curr{x}, prev{0.0f};
+            while (curr != prev)
+            {
+                prev = curr;
+                curr = 0.5f * (curr + x / curr);
+            }
 
-    template<typename T>
-    constexpr T sqrt(T x)
-    {
-        if (x >= 0 && x < std::numeric_limits<T>::infinity())
-        {
-            return detail::sqrt_newton_rhapson(x, x, T{0});
+            return curr;
         }
 
-        return std::numeric_limits<T>::quiet_NaN();
+        return std::numeric_limits<float>::quiet_NaN();
     }
 
     // Taken from FluentC++

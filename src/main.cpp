@@ -15,9 +15,9 @@ auto render_scene_1()
 #if defined(CTRT_DO_STATIC_RENDER)
     constexpr auto image = []() {
         StaticImage<image_width, image_height> image;
-        Camera camera{Pointf{0.0f, 0.0f, 500.0f},
-                      Vectorf{0.0f},
-                      Vectorf{0.0f, 1.0f, 0.0f},
+        Camera camera{Point{0.0f, 0.0f, 500.0f},
+                      Vector{0.0f},
+                      Vector{0.0f, 1.0f, 0.0f},
                       500.0f};
 
         FirstScene scene;
@@ -30,9 +30,9 @@ auto render_scene_1()
     return image;
 #else
     DynamicImage<image_width, image_height> image;
-    Camera camera{Pointf{0.0f, 0.0f, 500.0f},
-                  Vectorf{0.0f},
-                  Vectorf{0.0f, 1.0f, 0.0f},
+    Camera camera{Point{0.0f, 0.0f, 500.0f},
+                  Vector{0.0f},
+                  Vector{0.0f, 1.0f, 0.0f},
                   500.0f};
     FirstScene scene;
     scene.set_camera(camera);
@@ -53,12 +53,12 @@ auto render_scene_2()
     constexpr auto image = []() {
         StaticImage<image_width, image_height> image;
 
-        Camera camera{Pointf{0.0f, 0.0f, 500.0f},
-                      Vectorf{0.0f},
-                      Vectorf{0.0f, 1.0f, 0.0f},
+        Camera camera{Point{0.0f, 0.0f, 500.0f},
+                      Vector{0.0f},
+                      Vector{0.0f, 1.0f, 0.0f},
                       500.0f};
 
-        std::array<Shapes, 1> shapes_list{Sphere{Pointf{0.0f}, 150.0f}};
+        std::array<Shapes, 1> shapes_list{Sphere{Point{0.0f}, 150.0f}};
         std::array<Materials, 1> materials_list{DefaultMaterial{}};
         ShapeContainer<decltype(shapes_list)> shapes{std::move(shapes_list)};
         MaterialContainer<decltype(materials_list)> materials{
@@ -74,12 +74,12 @@ auto render_scene_2()
     return image;
 #else
     DynamicImage<image_width, image_height> image;
-    Camera camera{Pointf{0.0f, 0.0f, 500.0f},
-                  Vectorf{0.0f},
-                  Vectorf{0.0f, 1.0f, 0.0f},
+    Camera camera{Point{0.0f, 0.0f, 500.0f},
+                  Vector{0.0f},
+                  Vector{0.0f, 1.0f, 0.0f},
                   500.0f};
 
-    std::array<Shapes, 1> shapes_list{Sphere{Pointf{0.0f}, 150.0f}};
+    std::array<Shapes, 1> shapes_list{Sphere{Point{0.0f}, 150.0f}};
     std::array<Materials, 1> materials_list{DefaultMaterial{}};
     ShapeContainer<decltype(shapes_list)> shapes{std::move(shapes_list)};
     MaterialContainer<decltype(materials_list)> materials{

@@ -5,7 +5,7 @@
 
 TEST_CASE("[Vector] - constructor: empty constructor")
 {
-    constexpr Vectorf v;
+    constexpr Vector v;
     REQUIRE(v.x() == 0.0f);
     REQUIRE(v.y() == 0.0f);
     REQUIRE(v.z() == 0.0f);
@@ -13,7 +13,7 @@ TEST_CASE("[Vector] - constructor: empty constructor")
 
 TEST_CASE("[Vector] - constructor: uniform constructor")
 {
-    constexpr Vectorf v{1.0f};
+    constexpr Vector v{1.0f};
     REQUIRE(v.x() == 1.0f);
     REQUIRE(v.y() == 1.0f);
     REQUIRE(v.z() == 1.0f);
@@ -21,7 +21,7 @@ TEST_CASE("[Vector] - constructor: uniform constructor")
 
 TEST_CASE("[Vector] - constructor: parametrized constructor")
 {
-    constexpr Vectorf v{1.0f, 2.0f, 3.0f};
+    constexpr Vector v{1.0f, 2.0f, 3.0f};
     REQUIRE(v.x() == 1.0f);
     REQUIRE(v.y() == 2.0f);
     REQUIRE(v.z() == 3.0f);
@@ -29,7 +29,7 @@ TEST_CASE("[Vector] - constructor: parametrized constructor")
 
 TEST_CASE("[Vector] - operator[]: non-const")
 {
-    constexpr Vectorf v{1.0f, 2.0f, 3.0f};
+    constexpr Vector v{1.0f, 2.0f, 3.0f};
     REQUIRE(v[0] == 1.0f);
     REQUIRE(v[1] == 2.0f);
     REQUIRE(v[2] == 3.0f);
@@ -37,60 +37,16 @@ TEST_CASE("[Vector] - operator[]: non-const")
 
 TEST_CASE("[Vector] - operator[]: const")
 {
-    constexpr Vectorf v{1.0f, 2.0f, 3.0f};
+    constexpr Vector v{1.0f, 2.0f, 3.0f};
     REQUIRE(v[0] == 1.0f);
     REQUIRE(v[1] == 2.0f);
     REQUIRE(v[2] == 3.0f);
 }
 
-TEST_CASE("[Vector] - unary_op: rvalue version")
-{
-    constexpr Vectorf v{1.0f};
-    constexpr auto result = unary_op(std::move(v), [](float a) { return a; });
-
-    REQUIRE(result.x() == 1.0f);
-    REQUIRE(result.y() == 1.0f);
-    REQUIRE(result.z() == 1.0f);
-}
-
-TEST_CASE("[Vector] - unary_op: lvalue version")
-{
-    constexpr Vectorf v{1.0f};
-    constexpr auto result = unary_op(v, [](float a) { return a; });
-
-    REQUIRE(result.x() == 1.0f);
-    REQUIRE(result.y() == 1.0f);
-    REQUIRE(result.z() == 1.0f);
-}
-
-TEST_CASE("[Vector] - binary_op: rvalue version")
-{
-    constexpr Vectorf v{1.0f};
-    constexpr Vectorf u{2.0f};
-    constexpr auto result =
-        binary_op(std::move(v), u, [](float a, float b) { return a + b; });
-
-    REQUIRE(result.x() == 3.0f);
-    REQUIRE(result.y() == 3.0f);
-    REQUIRE(result.z() == 3.0f);
-}
-
-TEST_CASE("[Vector] - binary_op: lvalue version")
-{
-    constexpr Vectorf v{1.0f};
-    constexpr Vectorf u{2.0f};
-    constexpr auto result =
-        binary_op(v, u, [](float a, float b) { return a + b; });
-
-    REQUIRE(result.x() == 3.0f);
-    REQUIRE(result.y() == 3.0f);
-    REQUIRE(result.z() == 3.0f);
-}
-
 TEST_CASE("[Vector] - operator==")
 {
-    constexpr Vectorf v{1.0f};
-    constexpr Vectorf u{2.0f};
+    constexpr Vector v{1.0f};
+    constexpr Vector u{2.0f};
 
     REQUIRE(v == v);
     REQUIRE_FALSE(v == u);
@@ -98,8 +54,8 @@ TEST_CASE("[Vector] - operator==")
 
 TEST_CASE("[Vector] - operator!=")
 {
-    constexpr Vectorf v{1.0f};
-    constexpr Vectorf u{2.0f};
+    constexpr Vector v{1.0f};
+    constexpr Vector u{2.0f};
 
     REQUIRE(v != u);
     REQUIRE_FALSE(v != v);
@@ -107,7 +63,7 @@ TEST_CASE("[Vector] - operator!=")
 
 TEST_CASE("[Vector] - operator-: unary")
 {
-    constexpr Vectorf v{1.0f};
+    constexpr Vector v{1.0f};
     constexpr auto result = -v;
 
     REQUIRE(result.x() == -1.0f);
@@ -117,8 +73,8 @@ TEST_CASE("[Vector] - operator-: unary")
 
 TEST_CASE("[Vector] - operator +=")
 {
-    Vectorf v{1.0f};
-    Vectorf u{2.0f};
+    Vector v{1.0f};
+    Vector u{2.0f};
 
     v += u;
 
@@ -129,8 +85,8 @@ TEST_CASE("[Vector] - operator +=")
 
 TEST_CASE("[Vector] - operator-=")
 {
-    Vectorf v{1.0f};
-    Vectorf u{2.0f};
+    Vector v{1.0f};
+    Vector u{2.0f};
 
     u -= v;
 
@@ -141,7 +97,7 @@ TEST_CASE("[Vector] - operator-=")
 
 TEST_CASE("[Vector] - operator*=")
 {
-    Vectorf v{1.0f};
+    Vector v{1.0f};
     v *= 2.0f;
 
     REQUIRE(v.x() == 2.0f);
@@ -151,7 +107,7 @@ TEST_CASE("[Vector] - operator*=")
 
 TEST_CASE("[Vector] - operator/=")
 {
-    Vectorf v{2.0f};
+    Vector v{2.0f};
     v /= 2.0f;
 
     REQUIRE(v.x() == 1.0f);
@@ -161,8 +117,8 @@ TEST_CASE("[Vector] - operator/=")
 
 TEST_CASE("[Vector] - operator+")
 {
-    constexpr Vectorf v{1.0f};
-    constexpr Vectorf u{2.0f};
+    constexpr Vector v{1.0f};
+    constexpr Vector u{2.0f};
 
     constexpr auto result = v + u;
 
@@ -173,8 +129,8 @@ TEST_CASE("[Vector] - operator+")
 
 TEST_CASE("[Vector] - operator-: binary")
 {
-    constexpr Vectorf v{1.0f};
-    constexpr Vectorf u{2.0f};
+    constexpr Vector v{1.0f};
+    constexpr Vector u{2.0f};
 
     constexpr auto result = u - v;
 
@@ -185,8 +141,8 @@ TEST_CASE("[Vector] - operator-: binary")
 
 TEST_CASE("[Vector] - operator*: vector * vector")
 {
-    constexpr Vectorf v{1.0f};
-    constexpr Vectorf u{2.0f};
+    constexpr Vector v{1.0f};
+    constexpr Vector u{2.0f};
 
     constexpr auto result = v * u;
 
@@ -197,7 +153,7 @@ TEST_CASE("[Vector] - operator*: vector * vector")
 
 TEST_CASE("[Vector] - operator*: vector * scalar")
 {
-    constexpr Vectorf v{1.0f};
+    constexpr Vector v{1.0f};
 
     constexpr auto result = v * 2.0f;
 
@@ -208,7 +164,7 @@ TEST_CASE("[Vector] - operator*: vector * scalar")
 
 TEST_CASE("[Vector] - oeprator*: scalar * vector")
 {
-    constexpr Vectorf v{1.0f};
+    constexpr Vector v{1.0f};
 
     constexpr auto result = 2.0f * v;
 
@@ -219,7 +175,7 @@ TEST_CASE("[Vector] - oeprator*: scalar * vector")
 
 TEST_CASE("[Vector] - operator/")
 {
-    constexpr Vectorf v{2.0f};
+    constexpr Vector v{2.0f};
 
     constexpr auto result = v / 2.0f;
 
@@ -230,8 +186,8 @@ TEST_CASE("[Vector] - operator/")
 
 TEST_CASE("[Vector] - dot")
 {
-    constexpr Vectorf v{1.0f};
-    constexpr Vectorf u{2.0f};
+    constexpr Vector v{1.0f};
+    constexpr Vector u{2.0f};
 
     constexpr auto result = dot(v, u);
 
@@ -240,7 +196,7 @@ TEST_CASE("[Vector] - dot")
 
 TEST_CASE("[Vector] - length")
 {
-    constexpr Vectorf v{2.0f, 0.0f, 0.0};
+    constexpr Vector v{2.0f, 0.0f, 0.0};
 
     constexpr auto result = length(v);
 
@@ -249,7 +205,7 @@ TEST_CASE("[Vector] - length")
 
 TEST_CASE("[Vector] - length_squared")
 {
-    constexpr Vectorf v{2.0f, 0.0f, 0.0};
+    constexpr Vector v{2.0f, 0.0f, 0.0};
 
     constexpr auto result = length_squared(v);
 
@@ -258,8 +214,8 @@ TEST_CASE("[Vector] - length_squared")
 
 TEST_CASE("[Vector] - cross")
 {
-    constexpr Vectorf v{1.0f, 0.0f, 0.0f};
-    constexpr Vectorf u{0.0f, 1.0f, 0.0f};
+    constexpr Vector v{1.0f, 0.0f, 0.0f};
+    constexpr Vector u{0.0f, 1.0f, 0.0f};
 
     constexpr auto w = cross(v, u);
 
@@ -268,11 +224,11 @@ TEST_CASE("[Vector] - cross")
     REQUIRE(w.z() == 1.0f);
 }
 
-TEST_CASE("[Vector] - unit_vector")
+TEST_CASE("[Vector] - normalise")
 {
-    constexpr Vectorf v{2.0f, 0.0f, 0.0f};
+    constexpr Vector v{2.0f, 0.0f, 0.0f};
 
-    constexpr auto result = unit_vector(v);
+    constexpr auto result = normalise(v);
 
     REQUIRE(result.x() == 1.0f);
     REQUIRE(result.y() == 0.0f);

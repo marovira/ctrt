@@ -6,7 +6,7 @@ template<typename T>
 class Material : public utils::StaticBase<T, Material>
 {
 public:
-    constexpr Colourf shade(ShadeRec const& rec) const
+    constexpr Colour shade(ShadeRec const& rec) const
     {
         return this->self().shade(rec);
     }
@@ -15,7 +15,7 @@ public:
 class DefaultMaterial : public Material<DefaultMaterial>
 {
 public:
-    constexpr Colourf shade([[maybe_unused]] ShadeRec const& rec) const
+    constexpr Colour shade([[maybe_unused]] ShadeRec const& rec) const
     {
         return {1.0f, 0.0f, 0.0f};
     }
@@ -29,7 +29,7 @@ public:
     constexpr MaterialWrapper(T&& elem) : m_materials{std::forward<T>(elem)}
     {}
 
-    constexpr Colourf shade(ShadeRec const& rec) const
+    constexpr Colour shade(ShadeRec const& rec) const
     {
         return std::visit([rec](auto const& elem) { return elem.shade(rec); },
                           m_materials);

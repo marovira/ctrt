@@ -6,17 +6,17 @@ TEST_CASE("[DefaultMaterial] - shade")
 {
     constexpr ShadeRec rc;
     constexpr DefaultMaterial mat;
-    constexpr Colourf result = mat.shade(rc);
+    constexpr Colour result = mat.shade(rc);
 
-    REQUIRE(result == Colourf{1.0f, 0.0f, 0.0f});
+    REQUIRE(result == Colour{1.0f, 0.0f, 0.0f});
 }
 
 TEST_CASE("[MaterialWrapper] - shade: default material")
 {
     constexpr Materials materials{DefaultMaterial{}};
-    constexpr Colourf result = materials.shade(ShadeRec{});
+    constexpr Colour result = materials.shade(ShadeRec{});
 
-    REQUIRE(result == Colourf{1.0f, 0.0f, 0.0f});
+    REQUIRE(result == Colour{1.0f, 0.0f, 0.0f});
 }
 
 TEST_CASE("[MaterialContainer] - operator[]: const")
@@ -25,6 +25,6 @@ TEST_CASE("[MaterialContainer] - operator[]: const")
     constexpr MaterialContainer<decltype(list)> container{std::move(list)};
 
     constexpr ShadeRec rc{};
-    constexpr Colourf result = container[0].shade(rc);
-    REQUIRE(result == Colourf{1.0f, 0.0f, 0.0f});
+    constexpr Colour result = container[0].shade(rc);
+    REQUIRE(result == Colour{1.0f, 0.0f, 0.0f});
 }
