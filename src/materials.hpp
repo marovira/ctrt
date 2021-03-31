@@ -40,25 +40,3 @@ private:
 };
 
 using Materials = MaterialWrapper<DefaultMaterial>;
-
-template<typename Container>
-class MaterialContainer
-{
-public:
-    constexpr MaterialContainer(Container&& list) :
-        m_materials{std::forward<Container>(list)}
-    {}
-
-    constexpr auto& operator[](int material_id)
-    {
-        return m_materials[material_id];
-    }
-
-    constexpr auto operator[](int material_id) const
-    {
-        return m_materials[material_id];
-    }
-
-private:
-    Container m_materials;
-};

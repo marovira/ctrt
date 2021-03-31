@@ -79,11 +79,8 @@ auto render_scene_2()
                   Vector{0.0f, 1.0f, 0.0f},
                   500.0f};
 
-    std::array<Shapes, 1> shapes_list{Sphere{Point{0.0f}, 150.0f}};
-    std::array<Materials, 1> materials_list{DefaultMaterial{}};
-    ShapeContainer<decltype(shapes_list)> shapes{std::move(shapes_list)};
-    MaterialContainer<decltype(materials_list)> materials{
-        std::move(materials_list)};
+    std::array<Shapes, 1> shapes{Sphere{Point{0.0f}, 150.0f}};
+    std::array<Materials, 1> materials{DefaultMaterial{}};
 
     SphereScene scene;
     scene.set_camera(camera);

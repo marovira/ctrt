@@ -145,28 +145,3 @@ private:
 };
 
 using Shapes = ShapeWrapper<Plane, Sphere>;
-
-template<typename Container>
-class ShapeContainer
-{
-public:
-    constexpr ShapeContainer(Container&& list) :
-        m_shapes{std::forward<Container>(list)}
-    {}
-
-    constexpr std::optional<ShadeRec> hit(Ray const& ray) const
-    {
-        for (auto const& elem : m_shapes)
-        {
-            if (auto result = elem.hit(ray); result)
-            {
-                return result;
-            }
-        }
-
-        return {};
-    }
-
-private:
-    Container m_shapes;
-};

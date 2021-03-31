@@ -71,10 +71,13 @@ public:
                            ShapeContainer const& shapes,
                            MaterialContainer const& materials) const
     {
-        if (auto result = shapes.hit(ray); result)
+        for (auto const& shape : shapes)
         {
-            ShadeRec rc = *result;
-            return materials[rc.material_id].shade(rc);
+            if (auto result = shape.hit(ray); result)
+            {
+                ShadeRec rc = *result;
+                return materials[rc.material_id].shade(rc);
+            }
         }
 
         return background(ray);

@@ -113,14 +113,3 @@ TEST_CASE("[ShapeWrapper] - hit: sphere")
 
     REQUIRE(result.has_value());
 }
-
-TEST_CASE("[ShapeContainer] - hit")
-{
-    constexpr std::array<Shapes, 2> list{Sphere{}, Plane{}};
-    constexpr ShapeContainer<decltype(list)> container{std::move(list)};
-    constexpr Ray ray{Point{2.0f, 0.0f, 0.0f}, Vector{-1.0f, 0.0f, 0.0f}};
-
-    constexpr auto result = container.hit(ray);
-
-    REQUIRE(result.has_value());
-}
