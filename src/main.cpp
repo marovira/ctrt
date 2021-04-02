@@ -15,15 +15,19 @@ auto render_scene_1()
 #if defined(CTRT_DO_STATIC_RENDER)
     constexpr auto image = []() {
         StaticImage<image_width, image_height> image;
+
         Camera camera{Point{0.0f, 0.0f, 500.0f},
                       Vector{0.0f},
                       Vector{0.0f, 1.0f, 0.0f},
                       500.0f};
 
-        FirstScene scene;
+        std::array<Shapes, 1> shapes{EmptyShape{}};
+
+        Scene<decltype(shapes), GradientBackground> scene{shapes,
+                                                          GradientBackground{}};
         scene.set_camera(camera);
 
-        Renderer::render_simple(scene, image);
+        Renderer::render(image, scene);
         return image;
     }();
 
@@ -34,15 +38,14 @@ auto render_scene_1()
                   Vector{0.0f},
                   Vector{0.0f, 1.0f, 0.0f},
                   500.0f};
-    FirstScene scene;
+
+    std::array<Shapes, 1> shapes{EmptyShape{}};
+
+    Scene<decltype(shapes), GradientBackground> scene{shapes,
+                                                      GradientBackground{}};
     scene.set_camera(camera);
 
-    zeus::Timer<float> timer;
-
-    timer.start();
-    Renderer::render_simple(scene, image);
-    auto elapsed = timer.elapsed();
-    fmt::print("render in: {} ms\n", elapsed * 100);
+    Renderer::render(image, scene);
     return image;
 #endif
 }
@@ -52,23 +55,26 @@ auto render_scene_2()
 #if defined(CTRT_DO_STATIC_RENDER)
     constexpr auto image = []() {
         StaticImage<image_width, image_height> image;
-
         Camera camera{Point{0.0f, 0.0f, 500.0f},
                       Vector{0.0f},
                       Vector{0.0f, 1.0f, 0.0f},
                       500.0f};
 
-        std::array<Shapes, 1> shapes{Sphere{Point{0.0f}, 150.0f}};
-        std::array<Materials, 1> materials{DefaultMaterial{}};
+        Sphere s{Point{0.0f}, 150.0f};
+        s.set_default_colour(Colour{1.0f, 0.0f, 0.0f});
 
-        SphereScene scene;
+        std::array<Shapes, 1> shapes{s};
+
+        Scene<decltype(shapes), DefaultBackground> scene{shapes,
+                                                         DefaultBackground{}};
         scene.set_camera(camera);
 
-        Renderer::render(scene, image, shapes, materials);
+        Renderer::render(image, scene);
         return image;
     }();
 
     return image;
+
 #else
     DynamicImage<image_width, image_height> image;
     Camera camera{Point{0.0f, 0.0f, 500.0f},
@@ -76,17 +82,16 @@ auto render_scene_2()
                   Vector{0.0f, 1.0f, 0.0f},
                   500.0f};
 
-    std::array<Shapes, 1> shapes{Sphere{Point{0.0f}, 150.0f}};
-    std::array<Materials, 1> materials{DefaultMaterial{}};
+    Sphere s{Point{0.0f}, 150.0f};
+    s.set_default_colour(Colour{1.0f, 0.0f, 0.0f});
 
-    SphereScene scene;
+    std::array<Shapes, 1> shapes{s};
+
+    Scene<decltype(shapes), DefaultBackground> scene{shapes,
+                                                     DefaultBackground{}};
     scene.set_camera(camera);
 
-    zeus::Timer<float> timer;
-    timer.start();
-    Renderer::render(scene, image, shapes, materials);
-    auto elapsed = timer.elapsed();
-    fmt::print("render in: {} ms\n", elapsed * 100);
+    Renderer::render(image, scene);
     return image;
 #endif
 }

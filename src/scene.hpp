@@ -7,10 +7,34 @@
 #include "utils.hpp"
 #include "vector.hpp"
 
-template<typename T>
-class Scene : public utils::StaticBase<T, Scene>
+class DefaultBackground
 {
 public:
+    constexpr Colour operator()(Ray const&) const
+    {
+        return Colour{0.0f};
+    }
+};
+
+class GradientBackground
+{
+public:
+    constexpr Colour operator()(Ray const& ray) const
+    {
+        float t = 0.5f * (ray.direction.y() + 1.0f);
+        return (1.0f - t) * Colour{1.0f, 1.0f, 1.0f} +
+               t * Colour{0.5f, 0.7f, 1.0f};
+    }
+};
+
+template<class ShapeContainer, class BackgroundColour>
+class Scene
+{
+public:
+    constexpr Scene(ShapeContainer& container, BackgroundColour bckg) :
+        m_shapes{container}, m_background_colour{bckg}
+    {}
+
     constexpr void set_camera(Camera const& camera)
     {
         m_camera = camera;
@@ -21,72 +45,18 @@ public:
         return m_camera;
     }
 
-    template<class ShapeContainer, class MaterialContainer>
-    constexpr Colour trace(Ray const& ray,
-                           ShapeContainer const& shapes,
-                           MaterialContainer const& materials) const
+    constexpr ShapeContainer const& get_shapes() const
     {
-        return this->self().trace(ray, shapes, materials);
+        return m_shapes;
     }
 
-    constexpr Colour trace_simple(Ray const& ray) const
+    constexpr Colour get_background_colour(Ray const& ray) const
     {
-        return this->self().trace_simple(ray);
-    }
-
-    constexpr Colour background(Ray const& ray) const
-    {
-        return this->self().background(ray);
+        return m_background_colour(ray);
     }
 
 private:
     Camera m_camera;
-};
-
-class FirstScene : public Scene<FirstScene>
-{
-public:
-    constexpr FirstScene() = default;
-
-    constexpr Colour trace_simple(Ray const& ray) const
-    {
-        return background(ray);
-    }
-
-    constexpr Colour background(Ray const& ray) const
-    {
-        float t = 0.5f * (ray.direction.y() + 1.0f);
-        return (1.0f - t) * Colour{1.0f, 1.0f, 1.0f} +
-               t * Colour{0.5f, 0.7f, 1.0f};
-    }
-};
-
-class SphereScene : public Scene<SphereScene>
-{
-public:
-    constexpr SphereScene() = default;
-
-    template<class ShapeContainer, class MaterialContainer>
-    constexpr Colour trace(Ray const& ray,
-                           ShapeContainer const& shapes,
-                           MaterialContainer const& materials) const
-    {
-        for (auto const& shape : shapes)
-        {
-            if (auto result = shape.hit(ray); result)
-            {
-                ShadeRec rc = *result;
-                return materials[rc.material_id].shade(rc);
-            }
-        }
-
-        return background(ray);
-    }
-
-    constexpr Colour background(Ray const& ray) const
-    {
-        float t = 0.5f * (ray.direction.y() + 1.0f);
-        return (1.0f - t) * Colour{1.0f, 1.0f, 1.0f} +
-               t * Colour{0.5f, 0.7f, 1.0f};
-    }
+    ShapeContainer& m_shapes;
+    BackgroundColour m_background_colour;
 };

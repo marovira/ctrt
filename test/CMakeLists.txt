@@ -6,7 +6,6 @@ set(CTRT_TEST_SOURCE
     ${CTRT_TEST_ROOT}/camera_test.cpp
     ${CTRT_TEST_ROOT}/image_test.cpp
     ${CTRT_TEST_ROOT}/assert.cpp
-    ${CTRT_TEST_ROOT}/scene_test.cpp
     ${CTRT_TEST_ROOT}/shapes_test.cpp
     ${CTRT_TEST_ROOT}/materials_test.cpp
     PARENT_SCOPE)
