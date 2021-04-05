@@ -1,5 +1,7 @@
 #pragma once
 
+#include "ray.hpp"
+
 class Renderer
 {
 public:
