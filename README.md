@@ -21,7 +21,8 @@ Suffern's *Ray Tracing from the Ground Up*.
 
 > **Note:**
 >
-> If you're interested in how this ray tracer was designed, you can read about
+> I have a blog that describes how the ray tracer was designed. If you're
+> interested, you can read about it
 > [here](https://marovira.github.io/p/designing-a-compile-time-ray-tracer/)
 
 ## Results
@@ -32,16 +33,18 @@ Last render performed:
 
 ## Performance
 
-All tests were performed on a PC running Windows 10 64-bit with an AMD Ryzen 9
-3900X processor and 64 GB of RAM. The code was compiled using MSVC 16.9.1. The
-comparisons were performed by generating the image both at runtime and compile
-time. All tested images are 512x512 and can be found in the `test_images`
-directory. Results are as follows:
+Due to the fact that all computations are performed at compile-time, the ray
+tracer utilises a significant amount of memory and takes a long time to perform
+the render. All renders are performed was done on a PC running Windows 1- 64-bit
+with an AMD Ryzen 9 3900X processor and 64 GB of RAM. With this setup, here are
+the results for each generated image (they can be found in the `test_images`
+directory):
 
-| Test | Runtime | Compile-time |
-|------|---------|--------------|
-| test_01 | 1.67 ms | 19m 35s |
-| test_02 | 3.10 ms| 34m 36s |
+| Scene | Time |
+|------|-------|
+|| test_01 | 21m 6s |
+| test_02 | 11m 43s |
+| test_03 | 42m 4s |
 
 ## Dependencies
 
