@@ -6,21 +6,31 @@
 #include <optional>
 #include <variant>
 
-struct HitData
+struct ShadeRec
 {
     Point hit_point{};
     Vector normal{};
     Colour default_colour{0.0f};
+    Ray ray;
+    int material_id{-1};
 };
 
 template<typename T>
 class Shape : public utils::StaticBase<T, Shape>
 {
 public:
+    constexpr Shape()
+    {}
+
     static constexpr float epsilon{0.01f};
-    constexpr std::optional<HitData> hit(Ray const& ray) const
+    constexpr std::optional<ShadeRec> hit(Ray const& ray) const
     {
         return this->self().hit(ray);
+    }
+
+    constexpr std::optional<float> shadow_hit(Ray const& ray) const
+    {
+        return this->self().shadow_hit(ray);
     }
 
     constexpr void set_default_colour(Colour const& colour)
@@ -28,14 +38,25 @@ public:
         m_default_colour = colour;
     }
 
+    constexpr void set_material_id(int id)
+    {
+        m_material_id = id;
+    }
+
 protected:
     Colour m_default_colour;
+    int m_material_id{-1};
 };
 
 class EmptyShape : public Shape<EmptyShape>
 {
 public:
-    constexpr std::optional<HitData> hit([[maybe_unused]] Ray const& ray) const
+    constexpr std::optional<ShadeRec> hit(Ray const&) const
+    {
+        return {};
+    }
+
+    constexpr std::optional<float> shadow_hit(Ray const&) const
     {
         return {};
     }
@@ -50,18 +71,32 @@ public:
     constexpr Plane(Point const& pt, Vector const& n) : m_pt{pt}, m_normal{n}
     {}
 
-    constexpr std::optional<HitData> hit(Ray const& ray) const
+    constexpr std::optional<ShadeRec> hit(Ray const& ray) const
     {
         Vector u = m_pt - ray.origin;
         float t  = dot(u, m_normal) / dot(ray.direction, m_normal);
 
         if (t > epsilon)
         {
-            HitData rec;
+            ShadeRec rec;
             rec.normal         = m_normal;
             rec.hit_point      = ray(t);
             rec.default_colour = m_default_colour;
+            rec.material_id    = m_material_id;
             return {rec};
+        }
+
+        return {};
+    }
+
+    constexpr std::optional<float> shadow_hit(Ray const& ray) const
+    {
+        Vector u = m_pt - ray.origin;
+        float t  = dot(u, m_normal) / dot(ray.direction, m_normal);
+
+        if (t > epsilon)
+        {
+            return {t};
         }
 
         return {};
@@ -82,7 +117,7 @@ public:
         m_centre{pt}, m_radius{radius}, m_radius_squared{radius * radius}
     {}
 
-    constexpr std::optional<HitData> hit(Ray const& ray) const
+    constexpr std::optional<ShadeRec> hit(Ray const& ray) const
     {
         Vector temp = ray.origin - m_centre;
         float a     = dot(ray.direction, ray.direction);
@@ -113,11 +148,42 @@ public:
 
             if (hit)
             {
-                HitData rec;
+                ShadeRec rec;
                 rec.normal         = (temp + t * ray.direction) / m_radius;
                 rec.hit_point      = ray(t_min);
                 rec.default_colour = m_default_colour;
+                rec.material_id    = m_material_id;
                 return {rec};
+            }
+        }
+
+        return {};
+    }
+
+    constexpr std::optional<float> shadow_hit(Ray const& ray) const
+    {
+        Vector temp = ray.origin - m_centre;
+        float a     = dot(ray.direction, ray.direction);
+        float b     = 2.0f * dot(temp, ray.direction);
+        float c     = dot(temp, temp) - m_radius_squared;
+        float disc  = b * b - 4.0f * a * c;
+
+        if (disc > 0.0f)
+        {
+            float e     = utils::sqrt(disc);
+            float denom = 2.0f * a;
+
+            float t = (-b - e) / denom;
+
+            if (t >= epsilon)
+            {
+                return {t};
+            }
+
+            t = (-b + e) / denom;
+            if (t >= epsilon)
+            {
+                return {t};
             }
         }
 
@@ -134,14 +200,23 @@ template<class... Shapes>
 class ShapeWrapper
 {
 public:
+    constexpr ShapeWrapper()
+    {}
+
     template<typename T, typename = utils::Contains<T, Shapes...>>
     constexpr ShapeWrapper(T&& elem) : m_shape{std::forward<T>(elem)}
     {}
 
-    constexpr std::optional<HitData> hit(Ray const& ray) const
+    constexpr std::optional<ShadeRec> hit(Ray const& ray) const
     {
         return std::visit([ray](auto const& elem) { return elem.hit(ray); },
                           m_shape);
+    }
+
+    constexpr std::optional<float> shadow_hit(Ray const& ray) const
+    {
+        return std::visit(
+            [ray](auto const& elem) { return elem.shadow_hit(ray); }, m_shape);
     }
 
 private:

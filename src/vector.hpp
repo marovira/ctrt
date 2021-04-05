@@ -225,6 +225,11 @@ constexpr Vector normalise(Vector const& v)
     return out;
 }
 
+constexpr float distance(Vector const& v, Vector const& u)
+{
+    return length(v - u);
+}
+
 using Point  = Vector;
 using Normal = Vector;
 using Colour = Vector;

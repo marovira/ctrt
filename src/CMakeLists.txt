@@ -8,6 +8,8 @@ set(CTRT_INCLUDE_FILES
     ${CTRT_SOURCE_ROOT}/shapes.hpp
     ${CTRT_SOURCE_ROOT}/materials.hpp
     ${CTRT_SOURCE_ROOT}/renderer.hpp
+    ${CTRT_SOURCE_ROOT}/lights.hpp
+    ${CTRT_SOURCE_ROOT}/brdf.hpp
     PARENT_SCOPE)
 
 set(CTRT_SOURCE_FILES

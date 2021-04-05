@@ -1,7 +1,5 @@
 #pragma once
 
-#include "scene.hpp"
-
 class Renderer
 {
 public:
@@ -12,6 +10,10 @@ public:
 
         const float width  = static_cast<float>(Image::width);
         const float height = static_cast<float>(Image::height);
+
+        auto const& lights    = scene.get_lights();
+        auto const& materials = scene.get_materials();
+        auto const& shapes    = scene.get_shapes();
 
         for (std::size_t row{0}; row < Image::height; ++row)
         {
@@ -30,9 +32,11 @@ public:
                 {
                     if (auto result = shape.hit(ray); result)
                     {
-                        auto hit_data = *result;
-                        colour        = hit_data.default_colour;
-                        bHit          = true;
+                        auto rec        = *result;
+                        int material_id = rec.material_id;
+                        colour =
+                            materials[material_id].shade(rec, lights, shapes);
+                        bHit = true;
                         break;
                     }
                 }
