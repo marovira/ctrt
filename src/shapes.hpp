@@ -99,7 +99,7 @@ public:
             return {t};
         }
 
-        return {};
+        return {std::nullopt};
     }
 
 private:
@@ -187,7 +187,7 @@ public:
             }
         }
 
-        return {};
+        return {std::nullopt};
     }
 
 private:
