@@ -64,6 +64,28 @@ public:
     }
 };
 
+class DirectionalLight : public Light<DirectionalLight>
+{
+public:
+    constexpr Vector get_direction(ShadeRec const&) const
+    {
+        return m_direction;
+    }
+
+    constexpr void set_direction(Vector const& dir)
+    {
+        m_direction = normalise(dir);
+    }
+
+    constexpr Point get_position() const
+    {
+        return {};
+    }
+
+private:
+    Vector m_direction;
+};
+
 class PointLight : public Light<PointLight>
 {
 public:
@@ -126,4 +148,4 @@ private:
     std::variant<Lights...> m_light;
 };
 
-using Lights = LightWrapper<AmbientLight, PointLight>;
+using Lights = LightWrapper<AmbientLight, PointLight, DirectionalLight>;
