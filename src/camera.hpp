@@ -12,7 +12,7 @@ public:
                      Vector const& look_at,
                      Vector const& up,
                      float distance) :
-        m_distance{distance}
+        m_eye{eye}, m_distance{distance}
     {
         m_w = normalise(eye - look_at);
         m_u = normalise(cross(up, m_w));
@@ -25,7 +25,13 @@ public:
         return normalise(dir);
     }
 
+    constexpr Point get_eye() const
+    {
+        return m_eye;
+    }
+
 private:
+    Point m_eye;
     Vector m_u, m_v, m_w;
     float m_distance;
 };
