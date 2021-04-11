@@ -23,6 +23,22 @@ namespace utils
         return std::numeric_limits<float>::quiet_NaN();
     }
 
+    constexpr float pow(float base, int exp)
+    {
+        float ret{1.0f};
+        for (int i{0}; i < exp; ++i)
+        {
+            ret *= base;
+        }
+
+        return base;
+    }
+
+    constexpr float abs(float x)
+    {
+        return (x < 0.0f) ? -x : x;
+    }
+
     // Taken from FluentC++
     // https://www.fluentcpp.com/2017/05/19/crtp-helper/
     template<typename T, template<typename> class crtpType>
