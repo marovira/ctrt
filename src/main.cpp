@@ -6,11 +6,11 @@
 #include <fmt/printf.h>
 #include <zeus/timer.hpp>
 
-constexpr std::size_t image_width{512};
-constexpr std::size_t image_height{512};
+constexpr std::size_t image_width{600};
+constexpr std::size_t image_height{400};
 
-#define CTRT_RENDER_SCENE_3
-//#define CTRT_DO_STATIC_RENDER
+#define CTRT_RENDER_SCENE_4
+#define CTRT_DO_STATIC_RENDER
 
 #if defined(CTRT_RENDER_SCENE_1)
 auto render_scene_1()
@@ -259,6 +259,182 @@ auto render_scene_3()
 }
 #endif
 
+#if defined(CTRT_RENDER_SCENE_4)
+auto render_scene_4()
+{
+#    if defined(CTRT_DO_STATIC_RENDER)
+    constexpr auto image = []() {
+        StaticImage<image_width, image_height> image;
+
+        // Lights.
+        AmbientLight ambient;
+        ambient.set_radiance(0.5f);
+        ambient.set_colour(Colour{1.0f});
+
+        PointLight light;
+        light.set_colour(Colour{1.0f});
+        light.set_radiance(2.0f);
+        light.set_casts_shadows(true);
+        light.set_position(Vector{15, 15, 2.5f});
+
+        // Materials.
+        Phong red_phong;
+        red_phong.set_diffuse_reflection(0.75f);
+        red_phong.set_ambient_reflection(0.25f);
+        red_phong.set_diffuse_colour(Colour{1.0f, 0.0f, 0.0f});
+        red_phong.set_specular_reflection(0.25f);
+        red_phong.set_specular_exponent(50);
+        red_phong.set_specular_colour(Colour{1.0f});
+
+        Reflective blue_reflective;
+        blue_reflective.set_diffuse_reflection(0.75f);
+        blue_reflective.set_ambient_reflection(0.4f);
+        blue_reflective.set_diffuse_colour(Colour{0.0f, 0.0f, 1.0f});
+        blue_reflective.set_specular_reflection(0.15f);
+        blue_reflective.set_specular_exponent(100);
+        blue_reflective.set_specular_colour(Colour{1.0f});
+        blue_reflective.set_reflection_coeff(0.75f);
+        blue_reflective.set_reflection_colour(Colour{1.0f});
+
+        Matte white_matte;
+        white_matte.set_diffuse_reflection(0.97f);
+        white_matte.set_ambient_reflection(0.2f);
+        white_matte.set_diffuse_colour(Colour{1.0f});
+
+        Reflective green_reflective;
+        green_reflective.set_diffuse_reflection(0.5f);
+        green_reflective.set_ambient_reflection(0.25f);
+        green_reflective.set_diffuse_colour(Colour{0.0f, 1.0f, 0.0f});
+        green_reflective.set_specular_reflection(0.15f);
+        green_reflective.set_specular_exponent(100);
+        green_reflective.set_specular_colour(Colour{1.0f});
+        green_reflective.set_reflection_coeff(0.75f);
+        green_reflective.set_reflection_colour(Colour{1.0f});
+
+        // Shapes.
+        Sphere red_sphere{Point{3.85f, 2.3f, -2.55f}, 2.3f};
+        red_sphere.set_material_id(0);
+        Sphere blue_sphere{Point{-0.7f, 1.5f, 4.2f}, 2.0f};
+        blue_sphere.set_material_id(1);
+        Sphere green_sphere{Point{-3.0f, 4.0f, -5.0f}, 4.0f};
+        green_sphere.set_material_id(2);
+        Plane plane{Point{0.0f}, Vector{0, 1, 0}};
+        plane.set_material_id(3);
+
+        // Construct arrays.
+        std::array<Lights, 2> lights{ambient, light};
+        std::array<Materials, 4> materials{
+            red_phong, blue_reflective, green_reflective, white_matte};
+        std::array<Shapes, 4> shapes{
+            red_sphere, blue_sphere, green_sphere, plane};
+
+        Scene<decltype(shapes),
+              decltype(lights),
+              decltype(materials),
+              DefaultBackground>
+            scene{std::move(shapes),
+                  std::move(lights),
+                  std::move(materials),
+                  DefaultBackground{}};
+
+        Camera camera{Point{7.5f, 4.0f, 10.0f},
+                      Vector{-1.0f, 3.7f, 0.0f},
+                      Vector{0.0f, -1.0f, 0.0f},
+                      340.0f};
+
+        scene.set_camera(camera);
+
+        Renderer::render(image, scene);
+        return image;
+    }();
+
+    return image;
+#    else
+    DynamicImage<image_width, image_height> image;
+
+    // Lights.
+    AmbientLight ambient;
+    ambient.set_radiance(0.5f);
+    ambient.set_colour(Colour{1.0f});
+
+    PointLight light;
+    light.set_colour(Colour{1.0f});
+    light.set_radiance(2.0f);
+    light.set_casts_shadows(true);
+    light.set_position(Vector{15, 15, 2.5f});
+
+    // Materials.
+    Phong red_phong;
+    red_phong.set_diffuse_reflection(0.75f);
+    red_phong.set_ambient_reflection(0.25f);
+    red_phong.set_diffuse_colour(Colour{1.0f, 0.0f, 0.0f});
+    red_phong.set_specular_reflection(0.25f);
+    red_phong.set_specular_exponent(50);
+    red_phong.set_specular_colour(Colour{1.0f});
+
+    Reflective blue_reflective;
+    blue_reflective.set_diffuse_reflection(0.75f);
+    blue_reflective.set_ambient_reflection(0.4f);
+    blue_reflective.set_diffuse_colour(Colour{0.0f, 0.0f, 1.0f});
+    blue_reflective.set_specular_reflection(0.15f);
+    blue_reflective.set_specular_exponent(100);
+    blue_reflective.set_specular_colour(Colour{1.0f});
+    blue_reflective.set_reflection_coeff(0.75f);
+    blue_reflective.set_reflection_colour(Colour{1.0f});
+
+    Matte white_matte;
+    white_matte.set_diffuse_reflection(0.97f);
+    white_matte.set_ambient_reflection(0.2f);
+    white_matte.set_diffuse_colour(Colour{1.0f});
+
+    Reflective green_reflective;
+    green_reflective.set_diffuse_reflection(0.5f);
+    green_reflective.set_ambient_reflection(0.25f);
+    green_reflective.set_diffuse_colour(Colour{0.0f, 1.0f, 0.0f});
+    green_reflective.set_specular_reflection(0.15f);
+    green_reflective.set_specular_exponent(100);
+    green_reflective.set_specular_colour(Colour{1.0f});
+    green_reflective.set_reflection_coeff(0.75f);
+    green_reflective.set_reflection_colour(Colour{1.0f});
+
+    // Shapes.
+    Sphere red_sphere{Point{3.85f, 2.3f, -2.55f}, 2.3f};
+    red_sphere.set_material_id(0);
+    Sphere blue_sphere{Point{-0.7f, 1.5f, 4.2f}, 2.0f};
+    blue_sphere.set_material_id(1);
+    Sphere green_sphere{Point{-3.0f, 4.0f, -5.0f}, 4.0f};
+    green_sphere.set_material_id(2);
+    Plane plane{Point{0.0f}, Vector{0, 1, 0}};
+    plane.set_material_id(3);
+
+    // Construct arrays.
+    std::array<Lights, 2> lights{ambient, light};
+    std::array<Materials, 4> materials{
+        red_phong, blue_reflective, green_reflective, white_matte};
+    std::array<Shapes, 4> shapes{red_sphere, blue_sphere, green_sphere, plane};
+
+    Scene<decltype(shapes),
+          decltype(lights),
+          decltype(materials),
+          DefaultBackground>
+        scene{std::move(shapes),
+              std::move(lights),
+              std::move(materials),
+              DefaultBackground{}};
+
+    Camera camera{Point{7.5f, 4.0f, 10.0f},
+                  Vector{-1.0f, 3.7f, 0.0f},
+                  Vector{0.0f, -1.0f, 0.0f},
+                  340.0f};
+
+    scene.set_camera(camera);
+
+    Renderer::render(image, scene);
+    return image;
+#    endif
+}
+#endif
+
 int main()
 {
     fmt::print("\nStarting render...\n");
@@ -270,6 +446,8 @@ int main()
     auto image = render_scene_2();
 #elif defined(CTRT_RENDER_SCENE_3)
     auto image = render_scene_3();
+#elif defined(CTRT_RENDER_SCENE_4)
+    auto image = render_scene_4();
 #endif
     fmt::print("Render finished in: {:.2f}ms\n", timer.elapsed());
     save_image("../render_test.jpg", image);
