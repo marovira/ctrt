@@ -8,11 +8,14 @@
 
 struct ShadeRec
 {
+    static constexpr int max_reflection_depth{2};
+
     Point hit_point{};
     Vector normal{};
     Colour default_colour{0.0f};
     Ray ray;
     int material_id{-1};
+    int reflection_depth{0};
 };
 
 template<typename T>
@@ -83,6 +86,7 @@ public:
             rec.hit_point      = ray(t);
             rec.default_colour = m_default_colour;
             rec.material_id    = m_material_id;
+            rec.ray            = ray;
             return {rec};
         }
 
@@ -133,14 +137,14 @@ public:
             bool hit{false};
 
             float t = (-b - e) / denom;
-            if (t >= epsilon)
+            if (t > epsilon)
             {
                 hit   = true;
                 t_min = t;
             }
 
             t = (-b + e) / denom;
-            if (!hit && t >= epsilon)
+            if (!hit && t > epsilon)
             {
                 hit   = true;
                 t_min = t;
@@ -149,10 +153,11 @@ public:
             if (hit)
             {
                 ShadeRec rec;
-                rec.normal         = (temp + t * ray.direction) / m_radius;
+                rec.normal         = (temp + t_min * ray.direction) / m_radius;
                 rec.hit_point      = ray(t_min);
                 rec.default_colour = m_default_colour;
                 rec.material_id    = m_material_id;
+                rec.ray            = ray;
                 return {rec};
             }
         }
@@ -174,14 +179,13 @@ public:
             float denom = 2.0f * a;
 
             float t = (-b - e) / denom;
-
-            if (t >= epsilon)
+            if (t > epsilon)
             {
                 return {t};
             }
 
             t = (-b + e) / denom;
-            if (t >= epsilon)
+            if (t > epsilon)
             {
                 return {t};
             }
