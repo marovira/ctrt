@@ -8,7 +8,8 @@ public:
     template<class Image, class Scene>
     static constexpr void render(Image& image, Scene const& scene)
     {
-        Ray ray{Point{0.0f, 0.0f, 500.0f}, Vector{0.0f}};
+        Ray ray;
+        ray.origin = scene.get_camera().get_eye();
 
         const float width  = static_cast<float>(Image::width);
         const float height = static_cast<float>(Image::height);
@@ -36,8 +37,8 @@ public:
                     {
                         auto rec        = *result;
                         int material_id = rec.material_id;
-                        colour =
-                            materials[material_id].shade(rec, lights, shapes);
+                        colour          = materials[material_id].shade(
+                            rec, lights, shapes, materials);
                         bHit = true;
                         break;
                     }
