@@ -34,37 +34,6 @@ set(CTRT_TEST_ROOT ${CTRT_SOURCE_DIR}/test)
 set(CTRT_EXTERNAL_ROOT ${CTRT_SOURCE_DIR}/external)
 
 #================================
-# Add subdirectories.
-#================================
-add_subdirectory(${CTRT_SOURCE_ROOT})
-add_subdirectory(${CTRT_EXTERNAL_ROOT}/stb)
-
-set_target_properties(stb PROPERTIES FOLDER "ctrt")
-
-source_group("include" FILES ${CTRT_INCLUDE_FILES})
-source_group("source" FILES ${CTRT_SOURCE_FILES})
-
-#================================
-# Clang targets.
-#================================
-find_program(CLANG_FORMAT_EXE
-    NAMES "clang-format"
-    DOC "Path to clang-format executable"
-    )
-if (NOT CLANG_FORMAT_EXE)
-    message(STATUS "clang-format not found.")
-else()
-    message(STATUS "clang-format found: ${CLANG_FORMAT_EXE}")
-    set(CTRT_FILES
-        ${CTRT_HEADER_FILES}
-        ${CTRT_SOURCE_FILES}
-        )
-    add_custom_target(clang-format
-        COMMAND ${CLANG_FORMAT_EXE} -i -style=file ${CTRT_FILES}
-        )
-endif()
-
-#================================
 # Find Packages.
 #================================
 include(FetchContent)
@@ -108,43 +77,40 @@ if (CTRT_RENDER_STATIC)
         -DCTRT_DO_STATIC_RENDER)
 endif()
 
-add_executable(ctrt ${CTRT_INCLUDE_FILES} ${CTRT_SOURCE_FILES})
-target_include_directories(ctrt PUBLIC ${CTRT_SOURCE_ROOT})
-target_link_libraries(ctrt PUBLIC zeus::zeus stb)
-target_compile_features(ctrt PUBLIC cxx_std_17)
-target_compile_options(ctrt PUBLIC ${CTRT_COMPILER_FLAGS})
-target_compile_options(ctrt PUBLIC ${CTRT_DEBUG_FLAGS})
-target_compile_definitions(ctrt PUBLIC ${CTRT_COMPILE_DEFINITIONS})
-set_target_properties(ctrt PROPERTIES FOLDER "ctrt")
+#================================
+# Add subdirectories.
+#================================
+add_subdirectory(${CTRT_EXTERNAL_ROOT}/stb)
+set_target_properties(stb PROPERTIES FOLDER "ctrt")
 
-if (MSVC)
-    set_target_properties(ctrt PROPERTIES LINK_FLAGS ${CTRT_LINKER_FLAGS})
-endif()
+add_subdirectory(${CTRT_SOURCE_ROOT})
 
-if (CTRT_BUILD_TESTS)
-    FetchContent_Declare(
-        catch2
-        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        GIT_TAG 5d32ce26f4c18588f9eac3342aea122a38b8fed3
-        )
 
-    find_package(Catch2 QUIET)
-    if (NOT Catch2_FOUND AND NOT catch2_POPULATED)
-        FetchContent_Populate(catch2)
-        add_subdirectory(${catch2_SOURCE_DIR} ${catch2_BINARY_DIR})
-        set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${catch2_SOURCE_DIR}/contrib)
-    endif()
 
-    add_subdirectory(${CTRT_TEST_ROOT})
+#if (CTRT_BUILD_TESTS)
+    #FetchContent_Declare(
+        #catch2
+        #GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        #GIT_TAG 5d32ce26f4c18588f9eac3342aea122a38b8fed3
+        #)
 
-    source_group("source" FILES ${CTRT_TEST_SOURCE})
+    #find_package(Catch2 QUIET)
+    #if (NOT Catch2_FOUND AND NOT catch2_POPULATED)
+        #FetchContent_Populate(catch2)
+        #add_subdirectory(${catch2_SOURCE_DIR} ${catch2_BINARY_DIR})
+        #set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${catch2_SOURCE_DIR}/contrib)
+    #endif()
 
-    add_executable(ctrt_test ${CTRT_TEST_SOURCE})
-    target_include_directories(ctrt_test PUBLIC ${CTRT_SOURCE_ROOT})
-    target_link_libraries(ctrt_test Catch2::Catch2 zeus::zeus)
-    set_target_properties(ctrt_test PROPERTIES FOLDER "ctrt")
+    #add_subdirectory(${CTRT_TEST_ROOT})
 
-    include(CTest)
-    include(Catch)
-    catch_discover_tests(ctrt_test)
-endif()
+    #source_group("source" FILES ${CTRT_TEST_SOURCE})
+
+    #add_executable(ctrt_test ${CTRT_TEST_SOURCE})
+    #target_include_directories(ctrt_test PUBLIC ${CTRT_SOURCE_ROOT})
+    #target_link_libraries(ctrt_test Catch2::Catch2 zeus::zeus)
+    #set_target_properties(ctrt_test PROPERTIES FOLDER "ctrt")
+
+    #include(CTest)
+    #include(Catch)
+    #catch_discover_tests(ctrt_test)
+#endif()
