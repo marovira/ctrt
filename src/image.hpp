@@ -73,14 +73,17 @@ void save_image(std::string const& filename, Image const& image)
     std::vector<Pixel> pixel_buffer;
     pixel_buffer.resize(Image::size * Image::channels);
     std::size_t i{0};
-    for (std::size_t row{0}; row < Image::width; ++row)
+    for (std::size_t row{0}; row < Image::height; ++row)
     {
-        for (std::size_t col{0}; col < Image::height; ++col)
+        for (std::size_t col{0}; col < Image::width; ++col)
         {
             Colour colour     = image(row, col);
-            pixel_buffer[i++] = static_cast<Pixel>(255.0f * colour.r());
-            pixel_buffer[i++] = static_cast<Pixel>(255.0f * colour.g());
-            pixel_buffer[i++] = static_cast<Pixel>(255.0f * colour.b());
+            pixel_buffer[i++] = static_cast<Pixel>(
+                std::clamp((255.0f * colour.r()), 0.0f, 255.0f));
+            pixel_buffer[i++] = static_cast<Pixel>(
+                std::clamp((255.0f * colour.g()), 0.0f, 255.0f));
+            pixel_buffer[i++] = static_cast<Pixel>(
+                std::clamp((255.0f * colour.b()), 0.0f, 255.0f));
         }
     }
 
