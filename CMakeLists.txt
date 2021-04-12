@@ -19,6 +19,7 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 #================================
 option(CTRT_BUILD_TESTS "Build CTRT unit tests" ON)
 option(CTRT_RENDER_STATIC "Perform render at compile-time" OFF)
+set(CTRT_RENDER_SCENE "CTRT_RENDER_SCENE_1" CACHE STRING "Scene to render")
 
 # Make sure Zeus does not make the clang-format target and disable the
 # unit tests for it.
@@ -76,6 +77,9 @@ if (CTRT_RENDER_STATIC)
     set(CTRT_COMPILE_DEFINITIONS ${CTRT_COMPILE_DEFINITIONS}
         -DCTRT_DO_STATIC_RENDER)
 endif()
+
+set(CTRT_COMPILE_DEFINITIONS ${CTRT_COMPILE_DEFINITIONS} "-D${CTRT_RENDER_SCENE}")
+message(STATUS ${CTRT_COMPILE_DEFINITIONS})
 
 #================================
 # Add subdirectories.
