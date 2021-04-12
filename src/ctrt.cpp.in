@@ -25,8 +25,8 @@ auto merge_image()
         {
             for (std::size_t c{0}; c < tile.width; ++c)
             {
-                std::size_t row = tile.x_start + r;
-                std::size_t col = tile.y_start + c;
+                std::size_t row = tile.y_start + r;
+                std::size_t col = tile.x_start + c;
                 image(row, col) = data[(r * tile.width) + c];
             }
         }
@@ -39,7 +39,7 @@ auto merge_image()
 int main()
 {
     auto image = merge_image();
-    save_image("../render_test.jpg", image);
+    save_image("../../render_test.jpg", image);
 
     return 0;
 }

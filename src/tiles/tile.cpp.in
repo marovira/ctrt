@@ -13,7 +13,7 @@ constexpr std::size_t tile_height{@TILE_HEIGHT@};
 constexpr Tile tile{@TILE_X_START@, @TILE_X_END@, @TILE_Y_START@, @TILE_Y_END@, @TILE_WIDTH@, @TILE_HEIGHT@};
 
 #if defined(CTRT_RENDER_SCENE_1)
-inline auto render_scene_1()
+inline auto render_@TILE_NAME@_scene_1()
 {
 #    if defined(CTRT_DO_STATIC_RENDER)
     constexpr auto image = []() {
@@ -45,8 +45,7 @@ inline auto render_scene_1()
 
     return image;
 #    else
-    DynamicTiledImage<image_width, image_height> image;
-    image.resize(tile_width * tile_height);
+    DynamicTiledImage<tile_width, tile_height, image_width, image_height> image;
 
     Camera camera{Point{0.0f, 0.0f, 500.0f},
                   Vector{0.0f},
@@ -74,7 +73,7 @@ inline auto render_scene_1()
 #endif
 
 #if defined(CTRT_RENDER_SCENE_2)
-inline auto render_scene_2()
+inline auto render_@TILE_NAME@_scene_2()
 {
 #    if defined(CTRT_DO_STATIC_RENDER)
     constexpr auto image = []() {
@@ -97,7 +96,10 @@ inline auto render_scene_2()
               decltype(lights),
               decltype(materials),
               GradientBackground>
-            scene{shapes, lights, materials, GradientBackground{}};
+            scene{std::move(shapes),
+                  std::move(lights),
+                  std::move(materials),
+                  GradientBackground{}};
         scene.set_camera(camera);
 
         Renderer::render(image, scene, tile);
@@ -107,8 +109,7 @@ inline auto render_scene_2()
     return image;
 
 #    else
-    DynamicTiledImage<image_width, image_height> image;
-    image.resize(tile_width * tile_height);
+    DynamicTiledImage<tile_width, tile_height, image_width, image_height> image;
 
     Camera camera{Point{0.0f, 0.0f, 500.0f},
                   Vector{0.0f},
@@ -127,7 +128,10 @@ inline auto render_scene_2()
           decltype(lights),
           decltype(materials),
           DefaultBackground>
-        scene{shapes, lights, materials, DefaultBackground{}};
+        scene{std::move(shapes),
+              std::move(lights),
+              std::move(materials),
+              DefaultBackground{}};
     scene.set_camera(camera);
 
     Renderer::render(image, scene, tile);
@@ -137,7 +141,7 @@ inline auto render_scene_2()
 #endif
 
 #if defined(CTRT_RENDER_SCENE_3)
-inline auto render_scene_3()
+inline auto render_@TILE_NAME@_scene_3()
 {
 #    if defined(CTRT_DO_STATIC_RENDER)
     constexpr auto image = []() {
@@ -204,8 +208,7 @@ inline auto render_scene_3()
 
     return image;
 #    else
-    DynamicTiledImage<image_width, image_height> image;
-    image.resize(tile_width * tile_height);
+    DynamicTiledImage<tile_width, tile_height, image_width, image_height> image;
 
     Camera camera{Point{0.0f, 0.0f, 500.0f},
                   Vector{0.0f, 0.0f, 0.0f},
@@ -269,7 +272,7 @@ inline auto render_scene_3()
 #endif
 
 #if defined(CTRT_RENDER_SCENE_4)
-inline auto render_scene_4()
+inline auto render_@TILE_NAME@_scene_4()
 {
 #    if defined(CTRT_DO_STATIC_RENDER)
     constexpr auto image = []() {
@@ -360,8 +363,7 @@ inline auto render_scene_4()
 
     return image;
 #    else
-    DynamicTiledImage<image_width, image_height> image;
-    image.resize(tile_width * tile_height);
+    DynamicTiledImage<tile_width, tile_height, image_width, image_height> image;
 
     // Lights.
     AmbientLight ambient;
@@ -452,17 +454,18 @@ std::tuple<std::vector<Colour>, Tile> get_@TILE_NAME@()
     zeus::Timer<double> timer;
     timer.start();
 #if defined(CTRT_RENDER_SCENE_1)
-    auto image = render_scene_1();
+    auto image = render_@TILE_NAME@_scene_1();
 #elif defined(CTRT_RENDER_SCENE_2)
-    auto image = render_scene_2();
+    auto image = render_@TILE_NAME@_scene_2();
 #elif defined(CTRT_RENDER_SCENE_3)
-    auto image = render_scene_3();
+    auto image = render_@TILE_NAME@_scene_3();
 #elif defined(CTRT_RENDER_SCENE_4)
-    auto image = render_scene_4();
+    auto image = render_@TILE_NAME@_scene_4();
 #endif
     fmt::print("Render finished in: {:.2f}ms\n", timer.elapsed());
 
-    std::vector<Colour> data(image.get_data().begin(), image.get_data().end());
+    auto image_data = image.get_data();
+    std::vector<Colour> data(image_data.begin(), image_data.end());
 
     return {data, tile};
 }
