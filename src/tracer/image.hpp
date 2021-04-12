@@ -25,10 +25,13 @@ public:
     static constexpr int channels{3};
 
     constexpr Image()
+    {}
+
+    constexpr void resize(std::size_t new_size)
     {
         if constexpr (type == ImageType::dynamic_image)
         {
-            m_data.resize(width * height);
+            m_data.resize(new_size);
         }
     }
 
@@ -57,9 +60,23 @@ using StaticImage = Image<std::array<Colour, width * height>,
                           height,
                           ImageType::static_image>;
 
-template<std::size_t width, std::size_t height>
-using DynamicImage =
-    Image<std::vector<Colour>, width, height, ImageType::dynamic_image>;
+template<std::size_t tile_width,
+         std::size_t tile_height,
+         std::size_t image_width,
+         std::size_t image_height>
+using StaticTiledImage = Image<std::array<Colour, tile_width * tile_height>,
+                               image_width,
+                               image_height,
+                               ImageType::static_image>;
+
+template<std::size_t image_width, std::size_t image_height>
+using DynamicImage = Image<std::vector<Colour>,
+                           image_width,
+                           image_height,
+                           ImageType::dynamic_image>;
+
+template<std::size_t image_width, std::size_t image_height>
+using DynamicTiledImage = DynamicImage<image_width, image_height>;
 
 #if defined(CTRT_DEFINE_SAVE_IMAGE)
 #    include <stb_image_write.h>

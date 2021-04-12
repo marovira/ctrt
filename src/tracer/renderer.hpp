@@ -2,11 +2,19 @@
 
 #include "ray.hpp"
 
+struct Tile
+{
+    std::size_t x_start{0}, x_end{0};
+    std::size_t y_start{0}, y_end{0};
+    std::size_t width{0}, height{0};
+};
+
 class Renderer
 {
 public:
     template<class Image, class Scene>
-    static constexpr void render(Image& image, Scene const& scene)
+    static constexpr void
+    render(Image& image, Scene const& scene, Tile const& tile)
     {
         Ray ray;
         ray.origin = scene.get_camera().get_eye();
@@ -18,10 +26,13 @@ public:
         auto const& materials = scene.get_materials();
         auto const& shapes    = scene.get_shapes();
 
-        for (std::size_t row{0}; row < Image::height; ++row)
+        for (std::size_t r{0}; r < tile.height; ++r)
         {
-            for (std::size_t col{0}; col < Image::width; ++col)
+            for (std::size_t c{0}; c < tile.width; ++c)
             {
+                std::size_t row = tile.y_start + r;
+                std::size_t col = tile.x_start + c;
+
                 Point sample_pt{0.5f, 0.5f, 0.0f};
                 Point pixel_pt{
                     static_cast<float>(col) - 0.5f * width + sample_pt.x(),
@@ -49,7 +60,7 @@ public:
                     colour = scene.get_background_colour(ray);
                 }
 
-                image(row, col) = colour;
+                image(r, c) = colour;
             }
         }
     }
