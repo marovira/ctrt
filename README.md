@@ -42,7 +42,7 @@ directory):
 
 | Scene | Time |
 |------|-------|
-|| test_01 | 21m 6s |
+| test_01 | 21m 6s |
 | test_02 | 11m 43s |
 | test_03 | 42m 4s |
 
