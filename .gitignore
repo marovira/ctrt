@@ -10,3 +10,5 @@ gh-pages/
 generated/
 doc/html
 render_test.jpg
+tile_*
+ctrt.cpp
