@@ -72,8 +72,8 @@ using DynamicImage = Image<std::vector<Colour>,
                            ImageType::dynamic_image>;
 
 template<class Container,
-         std::size_t tile_width,
-         std::size_t tile_height,
+         std::size_t t_width,
+         std::size_t t_height,
          std::size_t image_width,
          std::size_t image_height,
          ImageType type>
@@ -83,8 +83,8 @@ public:
     static constexpr std::size_t width{image_width};
     static constexpr std::size_t height{image_height};
     static constexpr std::size_t size{width * height};
-    static constexpr std::size_t tile_width{tile_width};
-    static constexpr std::size_t tile_height{tile_height};
+    static constexpr std::size_t tile_width{t_width};
+    static constexpr std::size_t tile_height{t_height};
     static constexpr std::size_t tile_size{tile_width * tile_height};
     static constexpr int channels{3};
 
