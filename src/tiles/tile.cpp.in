@@ -299,6 +299,175 @@ inline auto render_@TILE_NAME@_scene_4()
         red_phong.set_specular_exponent(50);
         red_phong.set_specular_colour(Colour{1.0f});
 
+        Phong blue_phong;
+        blue_phong.set_diffuse_reflection(0.75f);
+        blue_phong.set_ambient_reflection(0.4f);
+        blue_phong.set_diffuse_colour(Colour{0.0f, 0.0f, 1.0f});
+        blue_phong.set_specular_reflection(0.15f);
+        blue_phong.set_specular_exponent(100);
+        blue_phong.set_specular_colour(Colour{1.0f});
+
+        Matte white_matte;
+        white_matte.set_diffuse_reflection(0.97f);
+        white_matte.set_ambient_reflection(0.2f);
+        white_matte.set_diffuse_colour(Colour{1.0f});
+
+        Phong green_phong;
+        green_phong.set_diffuse_reflection(0.5f);
+        green_phong.set_ambient_reflection(0.25f);
+        green_phong.set_diffuse_colour(Colour{0.0f, 1.0f, 0.0f});
+        green_phong.set_specular_reflection(0.15f);
+        green_phong.set_specular_exponent(100);
+        green_phong.set_specular_colour(Colour{1.0f});
+
+        // Shapes.
+        Sphere red_sphere{Point{3.85f, 2.3f, -2.55f}, 2.3f};
+        red_sphere.set_material_id(0);
+        Sphere blue_sphere{Point{-0.7f, 1.5f, 4.2f}, 2.0f};
+        blue_sphere.set_material_id(1);
+        Sphere green_sphere{Point{-3.0f, 4.0f, -5.0f}, 4.0f};
+        green_sphere.set_material_id(2);
+        Plane plane{Point{0.0f}, Vector{0, 1, 0}};
+        plane.set_material_id(3);
+
+        // Construct arrays.
+        std::array<Lights, 2> lights{ambient, light};
+        std::array<Materials, 4> materials{
+            red_phong, blue_phong, green_phong, white_matte};
+        std::array<Shapes, 4> shapes{
+            red_sphere, blue_sphere, green_sphere, plane};
+
+        Scene<decltype(shapes),
+              decltype(lights),
+              decltype(materials),
+              DefaultBackground>
+            scene{std::move(shapes),
+                  std::move(lights),
+                  std::move(materials),
+                  DefaultBackground{}};
+
+        Camera camera{Point{7.5f, 4.0f, 10.0f},
+                      Vector{-1.0f, 3.7f, 0.0f},
+                      Vector{0.0f, -1.0f, 0.0f},
+                      340.0f};
+
+        scene.set_camera(camera);
+
+        Renderer::render(image, scene, tile);
+        return image;
+    }();
+
+    return image;
+#    else
+    DynamicTiledImage<tile_width, tile_height, image_width, image_height> image;
+
+    // Lights.
+    AmbientLight ambient;
+    ambient.set_radiance(0.5f);
+    ambient.set_colour(Colour{1.0f});
+
+    PointLight light;
+    light.set_colour(Colour{1.0f});
+    light.set_radiance(2.0f);
+    light.set_casts_shadows(true);
+    light.set_position(Vector{15, 15, 2.5f});
+
+    // Materials.
+    Phong red_phong;
+    red_phong.set_diffuse_reflection(0.75f);
+    red_phong.set_ambient_reflection(0.25f);
+    red_phong.set_diffuse_colour(Colour{1.0f, 0.0f, 0.0f});
+    red_phong.set_specular_reflection(0.25f);
+    red_phong.set_specular_exponent(50);
+    red_phong.set_specular_colour(Colour{1.0f});
+
+    Phong blue_phong;
+    blue_phong.set_diffuse_reflection(0.75f);
+    blue_phong.set_ambient_reflection(0.4f);
+    blue_phong.set_diffuse_colour(Colour{0.0f, 0.0f, 1.0f});
+    blue_phong.set_specular_reflection(0.15f);
+    blue_phong.set_specular_exponent(100);
+    blue_phong.set_specular_colour(Colour{1.0f});
+
+    Matte white_matte;
+    white_matte.set_diffuse_reflection(0.97f);
+    white_matte.set_ambient_reflection(0.2f);
+    white_matte.set_diffuse_colour(Colour{1.0f});
+
+    Phong green_phong;
+    green_phong.set_diffuse_reflection(0.5f);
+    green_phong.set_ambient_reflection(0.25f);
+    green_phong.set_diffuse_colour(Colour{0.0f, 1.0f, 0.0f});
+    green_phong.set_specular_reflection(0.15f);
+    green_phong.set_specular_exponent(100);
+    green_phong.set_specular_colour(Colour{1.0f});
+
+    // Shapes.
+    Sphere red_sphere{Point{3.85f, 2.3f, -2.55f}, 2.3f};
+    red_sphere.set_material_id(0);
+    Sphere blue_sphere{Point{-0.7f, 1.5f, 4.2f}, 2.0f};
+    blue_sphere.set_material_id(1);
+    Sphere green_sphere{Point{-3.0f, 4.0f, -5.0f}, 4.0f};
+    green_sphere.set_material_id(2);
+    Plane plane{Point{0.0f}, Vector{0, 1, 0}};
+    plane.set_material_id(3);
+
+    // Construct arrays.
+    std::array<Lights, 2> lights{ambient, light};
+    std::array<Materials, 4> materials{
+        red_phong, blue_phong, green_phong, white_matte};
+    std::array<Shapes, 4> shapes{red_sphere, blue_sphere, green_sphere, plane};
+
+    Scene<decltype(shapes),
+          decltype(lights),
+          decltype(materials),
+          DefaultBackground>
+        scene{std::move(shapes),
+              std::move(lights),
+              std::move(materials),
+              DefaultBackground{}};
+
+    Camera camera{Point{7.5f, 4.0f, 10.0f},
+                  Vector{-1.0f, 3.7f, 0.0f},
+                  Vector{0.0f, -1.0f, 0.0f},
+                  340.0f};
+
+    scene.set_camera(camera);
+
+    Renderer::render(image, scene, tile);
+    return image;
+#    endif
+}
+#endif
+
+#if defined(CTRT_RENDER_SCENE_5)
+inline auto render_@TILE_NAME@_scene_5()
+{
+#    if defined(CTRT_DO_STATIC_RENDER)
+    constexpr auto image = []() {
+        StaticTiledImage<tile_width, tile_height, image_width, image_height>
+            image;
+
+        // Lights.
+        AmbientLight ambient;
+        ambient.set_radiance(0.5f);
+        ambient.set_colour(Colour{1.0f});
+
+        PointLight light;
+        light.set_colour(Colour{1.0f});
+        light.set_radiance(2.0f);
+        light.set_casts_shadows(true);
+        light.set_position(Vector{15, 15, 2.5f});
+
+        // Materials.
+        Phong red_phong;
+        red_phong.set_diffuse_reflection(0.75f);
+        red_phong.set_ambient_reflection(0.25f);
+        red_phong.set_diffuse_colour(Colour{1.0f, 0.0f, 0.0f});
+        red_phong.set_specular_reflection(0.25f);
+        red_phong.set_specular_exponent(50);
+        red_phong.set_specular_colour(Colour{1.0f});
+
         Reflective blue_reflective;
         blue_reflective.set_diffuse_reflection(0.75f);
         blue_reflective.set_ambient_reflection(0.4f);
@@ -448,6 +617,187 @@ inline auto render_@TILE_NAME@_scene_4()
 }
 #endif
 
+#if defined(CTRT_RENDER_SCENE_6)
+inline auto render_@TILE_NAME@_scene_6()
+{
+#if defined(CTRT_DO_STATIC_RENDER)
+    constexpr auto image = []()
+    {
+        StaticTiledImage<tile_width, tile_height, image_width, image_height>
+            image;
+
+        // Lights.
+        AmbientLight ambient;
+        ambient.set_radiance(0.5f);
+        ambient.set_colour(Colour{1.0f});
+
+        PointLight light;
+        light.set_colour(Colour{1.0f});
+        light.set_radiance(5.0f);
+        light.set_casts_shadows(true);
+        light.set_position(Vector{0.0f, 20.0f, 20.0f});
+
+        // Materials.
+        float ka{0.75f};
+        float kd{0.75f};
+        float ks{0.1f};
+        int e{20};
+        float kr{1.0f};
+
+        Reflective pink_reflective;
+        pink_reflective.set_diffuse_reflection(kd);
+        pink_reflective.set_ambient_reflection(ka);
+        pink_reflective.set_diffuse_colour(Colour{0.85f, 0.082f, 0.57f});
+        pink_reflective.set_specular_reflection(ks);
+        pink_reflective.set_specular_exponent(e);
+        pink_reflective.set_specular_colour(Colour{1.0f});
+        pink_reflective.set_reflection_coeff(kr);
+        pink_reflective.set_reflection_colour(Colour{1.0f});
+
+        Reflective green_reflective;
+        green_reflective.set_diffuse_reflection(kd);
+        green_reflective.set_ambient_reflection(ka);
+        green_reflective.set_diffuse_colour(Colour{0.19f, 0.8f, 0.19f});
+        green_reflective.set_specular_reflection(ks);
+        green_reflective.set_specular_exponent(e);
+        green_reflective.set_specular_colour(Colour{1.0f});
+        green_reflective.set_reflection_coeff(kr);
+        green_reflective.set_reflection_colour(Colour{1.0f});
+
+        Reflective red_reflective;
+        red_reflective.set_diffuse_reflection(kd);
+        red_reflective.set_ambient_reflection(ka);
+        red_reflective.set_diffuse_colour(Colour{0.86f, 0.07f, 0.23f});
+        red_reflective.set_specular_reflection(ks);
+        red_reflective.set_specular_exponent(e);
+        red_reflective.set_specular_colour(Colour{1.0f});
+        red_reflective.set_reflection_coeff(kr);
+        red_reflective.set_reflection_colour(Colour{1.0f});
+
+        // Shapes.
+        Sphere pink_sphere{Point{0.0f, 1.414f, 0.0f}, 0.866f};
+        pink_sphere.set_material_id(0);
+        Sphere green_sphere{Point{0.0f, 0.0f, 1.0f}, 0.866f};
+        green_sphere.set_material_id(1);
+        Sphere red_sphere{Point{0.866f, 0.0f, -0.5f}, 0.866f};
+        red_sphere.set_material_id(2);
+
+        // Construct arrays.
+        std::array<Lights, 2> lights{ambient, light};
+        std::array<Materials, 3> materials{
+            pink_reflective, green_reflective, red_reflective};
+        std::array<Shapes, 3> shapes{
+            pink_sphere, green_sphere, red_sphere};
+
+        Scene<decltype(shapes),
+              decltype(lights),
+              decltype(materials),
+              DefaultBackground>
+            scene{std::move(shapes),
+                  std::move(lights),
+                  std::move(materials),
+                  DefaultBackground{}};
+
+        Camera camera{Point{-35.0f, 25.0f, 35.0f},
+                      Vector{0.0f, 0.4f, -0.2f},
+                      Vector{0.0f, -1.0f, 0.0f},
+                      5500.0f};
+
+        scene.set_camera(camera);
+
+        Renderer::render(image, scene, tile);
+        return image;
+    }();
+
+    return image;
+#else
+    DynamicTiledImage<tile_width, tile_height, image_width, image_height> image;
+
+    // Lights.
+    AmbientLight ambient;
+    ambient.set_radiance(0.5f);
+    ambient.set_colour(Colour{1.0f});
+
+    PointLight light;
+    light.set_colour(Colour{1.0f});
+    light.set_radiance(5.0f);
+    light.set_casts_shadows(true);
+    light.set_position(Vector{0.0f, 20.0f, 20.0f});
+
+    // Materials.
+    float ka{0.75f};
+    float kd{0.75f};
+    float ks{0.1f};
+    int e{20};
+    float kr{1.0f};
+
+    Reflective pink_reflective;
+    pink_reflective.set_diffuse_reflection(kd);
+    pink_reflective.set_ambient_reflection(ka);
+    pink_reflective.set_diffuse_colour(Colour{0.85f, 0.082f, 0.57f});
+    pink_reflective.set_specular_reflection(ks);
+    pink_reflective.set_specular_exponent(e);
+    pink_reflective.set_specular_colour(Colour{1.0f});
+    pink_reflective.set_reflection_coeff(kr);
+    pink_reflective.set_reflection_colour(Colour{1.0f});
+
+    Reflective green_reflective;
+    green_reflective.set_diffuse_reflection(kd);
+    green_reflective.set_ambient_reflection(ka);
+    green_reflective.set_diffuse_colour(Colour{0.19f, 0.8f, 0.19f});
+    green_reflective.set_specular_reflection(ks);
+    green_reflective.set_specular_exponent(e);
+    green_reflective.set_specular_colour(Colour{1.0f});
+    green_reflective.set_reflection_coeff(kr);
+    green_reflective.set_reflection_colour(Colour{1.0f});
+
+    Reflective red_reflective;
+    red_reflective.set_diffuse_reflection(kd);
+    red_reflective.set_ambient_reflection(ka);
+    red_reflective.set_diffuse_colour(Colour{0.86f, 0.07f, 0.23f});
+    red_reflective.set_specular_reflection(ks);
+    red_reflective.set_specular_exponent(e);
+    red_reflective.set_specular_colour(Colour{1.0f});
+    red_reflective.set_reflection_coeff(kr);
+    red_reflective.set_reflection_colour(Colour{1.0f});
+
+    // Shapes.
+    Sphere pink_sphere{Point{0.0f, 1.414f, 0.0f}, 0.866f};
+    pink_sphere.set_material_id(0);
+    Sphere green_sphere{Point{0.0f, 0.0f, 1.0f}, 0.866f};
+    green_sphere.set_material_id(1);
+    Sphere red_sphere{Point{0.866f, 0.0f, -0.5f}, 0.866f};
+    red_sphere.set_material_id(2);
+
+    // Construct arrays.
+    std::array<Lights, 2> lights{ambient, light};
+    std::array<Materials, 3> materials{
+        pink_reflective, green_reflective, red_reflective};
+    std::array<Shapes, 3> shapes{
+        pink_sphere, green_sphere, red_sphere};
+
+    Scene<decltype(shapes),
+          decltype(lights),
+          decltype(materials),
+          DefaultBackground>
+        scene{std::move(shapes),
+              std::move(lights),
+              std::move(materials),
+              DefaultBackground{}};
+
+    Camera camera{Point{-35.0f, 25.0f, 35.0f},
+                  Vector{0.0f, 0.4f, -0.2f},
+                  Vector{0.0f, -1.0f, 0.0f},
+                  5500.0f};
+
+    scene.set_camera(camera);
+
+    Renderer::render(image, scene, tile);
+    return image;
+#endif
+}
+#endif
+
 std::tuple<std::vector<Colour>, Tile> get_@TILE_NAME@()
 {
     fmt::print("\nStarting render...\n");
@@ -461,6 +811,10 @@ std::tuple<std::vector<Colour>, Tile> get_@TILE_NAME@()
     auto image = render_@TILE_NAME@_scene_3();
 #elif defined(CTRT_RENDER_SCENE_4)
     auto image = render_@TILE_NAME@_scene_4();
+#elif defined(CTRT_RENDER_SCENE_5)
+    auto image = render_@TILE_NAME@_scene_5();
+#elif defined(CTRT_RENDER_SCENE_6)
+    auto image = render_@TILE_NAME@_scene_6();
 #endif
     fmt::print("Render finished in: {:.2f}ms\n", timer.elapsed());
 

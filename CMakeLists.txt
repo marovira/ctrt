@@ -79,7 +79,6 @@ if (CTRT_RENDER_STATIC)
 endif()
 
 set(CTRT_COMPILE_DEFINITIONS ${CTRT_COMPILE_DEFINITIONS} "-D${CTRT_RENDER_SCENE}")
-message(STATUS ${CTRT_COMPILE_DEFINITIONS})
 
 #================================
 # Add subdirectories.

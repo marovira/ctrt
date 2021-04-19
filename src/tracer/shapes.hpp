@@ -8,7 +8,7 @@
 
 struct ShadeRec
 {
-    static constexpr int max_reflection_depth{2};
+    static constexpr int max_reflection_depth{12};
 
     Point hit_point{};
     Vector normal{};
