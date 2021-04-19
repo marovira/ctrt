@@ -45,6 +45,11 @@ directory):
 | test_01 | 21m 6s |
 | test_02 | 11m 43s |
 | test_03 | 42m 4s |
+| test_04 | 15m 33s |
+| test_05 | 17m 31s |
+| test_06 | 1m 3s * |
+
+The final time was taken with the parallelised version of the ray tracer.
 
 ## Dependencies
 
