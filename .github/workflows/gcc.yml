@@ -33,6 +33,8 @@ jobs:
         shell: bash
         env:
           BUILD_TYPE: ${{ matrix.config.build_type }}
+          CC: ${{ matrix.config.cc }}
+          CXX: ${{ matrix.config.cxx }}
         run: |
           mkdir build && cd build
           cmake .. -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_SHARED_LIBS=OFF
@@ -40,5 +42,8 @@ jobs:
       - name: Build
         shell: bash
         working-directory: ./build
+        env:
+          CC: ${{ matrix.config.cc }}
+          CXX: ${{ matrix.config.cxx }}
         run: |
           make
